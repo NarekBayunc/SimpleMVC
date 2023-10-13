@@ -9,6 +9,8 @@ builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServe
 
 var app = builder.Build();
 
+await AppDbInitializer.Seed(app);
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -25,5 +27,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();
