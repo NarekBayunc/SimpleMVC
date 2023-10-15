@@ -12,7 +12,7 @@ namespace SimpleMVC.Data
                 var context = serviceScope.ServiceProvider.GetService<ApplicationContext>();
                 context?.Database.EnsureCreated();
 
-                if (!context.Cinemas.Any())
+                if (context!.Cinemas.Any())
                 {
                     context.Cinemas.AddRange(new List<Cinema>()
                     {

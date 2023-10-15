@@ -13,7 +13,7 @@ namespace SimpleMVC.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var data = await context.Movies.ToListAsync();
+            var data = await context.Movies.Include(m => m.Cinema).ToListAsync();
             return View(data);
         }
     }
