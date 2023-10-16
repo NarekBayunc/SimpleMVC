@@ -12,26 +12,30 @@ namespace SimpleMVC.Data.Services
             this.context = context;
 
         }
-        public async Task Add(Actor actor)
+        public async Task AddAsync(Actor actor)
         {
             await context.Actors.AddAsync(actor);
             await context.SaveChangesAsync();
         }
-        public async Task<IEnumerable<Actor>> GetAll()
+        public async Task<IEnumerable<Actor>> GetAllAsync()
         {
             return await context.Actors.ToListAsync();
         }
-        public Actor GetById(int id)
+        public async Task<Actor?> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await context.Actors.FirstOrDefaultAsync(a => a.Id == id);
         }
-        public void Remove(Actor actor)
+        public async Task RemoveAsync(int id)
         {
-            throw new NotImplementedException();
+            Actor? actor = await context.Actors.FirstOrDefaultAsync(a => a.Id == id);
+            context.Actors.Remove(actor!);
+            await context.SaveChangesAsync();
         }
-        public void Update(int id, Actor newActor)
+        public async Task<Actor> UpdateAsync(int id, Actor newActor)
         {
-            throw new NotImplementedException();
+            context.Actors.Update(newActor);
+            await context.SaveChangesAsync();
+            return newActor;
         }
     }
 }
