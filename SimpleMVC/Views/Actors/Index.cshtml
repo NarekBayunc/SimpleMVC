@@ -15,12 +15,12 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach(var item in Model)
+                @foreach (var item in Model)
                 {
                     <tr>
                         <td>
                             <img class="rounded-circle" src="@item.ProfilePictureURL" alt="@item.FullName"
-                            style="max-width: 150px">
+                                 style="max-width: 150px">
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.FullName)
@@ -29,13 +29,17 @@
                             @Html.DisplayFor(modelItem => item.Bio)
                         </td>
                         <td>
-                            <a class="btn btn-outline-primary text-black"><i class="bi bi-pencil-square"></i>Edit</a>
-                            <a class="btn btn-outline-info text-black"><i class="bi bi-eye"></i>Details</a>
-                            <a class="btn btn-danger text-black"><i class="bi bi-trash"></i>Delete</a>
+                            <a class="btn btn-outline-primary text-black"><i class="bi bi-pencil-square"></i> Edit</a>
+                            <a class="btn btn-outline-info text-black"><i class="bi bi-eye"></i> Details</a>
+                            <a class="btn btn-danger text-black"><i class="bi bi-trash"></i> Delete</a>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+</div>
+
+<div style="position: fixed; right: 25px; bottom: 70px"class="text-white">
+    <a asp-controller="Actors" asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"> Add New</i></a>
 </div>

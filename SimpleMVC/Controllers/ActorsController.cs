@@ -1,19 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SimpleMVC.Data;
+using SimpleMVC.Data.Services;
+using SimpleMVC.Models;
 
 namespace SimpleMVC.Controllers
 {
     public class ActorsController : Controller
     {
-        private readonly ApplicationContext context;
-        public ActorsController(ApplicationContext context)
+        private readonly IActorService service;
+        public ActorsController(IActorService service)
         {
-            this.context = context;
+            this.service = service;
         }
         public async Task<IActionResult> Index()
         {
-            return View(await context.Actors.ToListAsync());
+            return View(await service.GetAll());
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create([Bind("FullName, ProfilePictureURL, Bio")]Actor actor)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(actor);
+            }
+            else
+            {
+                await service.Add(actor);
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }
