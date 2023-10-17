@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SimpleMVC.Models
 {
-    public class Movie
+    public class Movie : IBaseEntity
     {
         public int Id { get; set; }
         [Display(Name = "Name")]

@@ -1,32 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SimpleMVC.Data;
+using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
 namespace SimpleMVC.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly ApplicationContext context;
-        public MoviesController(ApplicationContext context)
+        private readonly IEntityControllerService<Movie> movieService;
+        private readonly IEntityControllerService<Producer> producerService;
+        private readonly IEntityControllerService<Cinema> cinemaService;
+        public MoviesController(IEntityControllerService<Movie> mov, IEntityControllerService<Producer> prod,
+            IEntityControllerService<Cinema> cin)
         {
-            this.context = context;
+            movieService = mov;
+            producerService = prod;
+            cinemaService = cin;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var data = await context.Movies.Include(m => m.Cinema).ToListAsync();
+            var data = movieService.GetInlcudedListAsync(m => m.Cinema!).ToList();
             return View(data);
         }
         public async Task<IActionResult> Edit(int id)
         {
-            Movie? data = await context.Movies.Include(m=>m.Cinema).FirstOrDefaultAsync(m => m.Id == id);
+            Movie? data = movieService.GetInlcudedListAsync(m => m.Cinema!).FirstOrDefault(m => m.Id == id); 
          
             if (data == null) return Redirect("/Movies/Index");
 
             MovieViewModel movieViewModel = new MovieViewModel()
             {   Movie = data ,
-                Producers = await context.Producers.ToListAsync(),
-                Cinemas = await context.Cinemas.ToListAsync()
+                Producers = await producerService.GetAllAsync(),
+                Cinemas = await cinemaService.GetAllAsync()
             };
 
             if (movieViewModel == null)
@@ -47,10 +53,9 @@ namespace SimpleMVC.Controllers
             }
             else
             {
-                movie.Producer = context.Producers.FirstOrDefault(p => p.Id == movie.ProducerId);
-                movie.Cinema = context.Cinemas.FirstOrDefault(c => c.Id == movie.CinemaId);
-                context.Movies.Update(movie);
-                await context.SaveChangesAsync();
+                movie.Producer = await producerService.GetByIdAsync(movie.ProducerId);
+                movie.Cinema = await cinemaService.GetByIdAsync(movie.ProducerId);
+                await movieService.UpdateAsync(movie);
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -59,7 +64,7 @@ namespace SimpleMVC.Controllers
     public class MovieViewModel
     {
         public required Movie Movie { get; set; }
-        public required List<Producer> Producers { get; set; }
-        public required List<Cinema> Cinemas { get; set; }
+        public required IEnumerable<Producer> Producers { get; set; }
+        public required IEnumerable<Cinema> Cinemas { get; set; }
     }
 }

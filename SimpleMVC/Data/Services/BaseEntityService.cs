@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleMVC.Data.Base;
 using SimpleMVC.Models;
+using System.Linq.Expressions;
 
 namespace SimpleMVC.Data.Services
 {
@@ -26,6 +27,11 @@ namespace SimpleMVC.Data.Services
         public async Task<T?> GetByIdAsync(int id)
         {
             return await context.Set<T>().FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public IEnumerable<T> GetInlcudedListAsync(Expression<Func<T, object>> includeProperty)
+        {
+            return context.Set<T>().Include(includeProperty);
         }
 
         public async Task RemoveAsync(int id)

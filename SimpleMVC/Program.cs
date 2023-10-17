@@ -29,4 +29,5 @@ void GetServices()
     builder.Services.AddScoped<IEntityControllerService<Actor>, BaseEntityService<Actor>>();
     builder.Services.AddScoped<IEntityControllerService<Cinema>, BaseEntityService<Cinema>>(); 
     builder.Services.AddScoped<IEntityControllerService<Producer>, BaseEntityService<Producer>>();
+    builder.Services.AddScoped<IEntityControllerService<Movie>, BaseEntityService<Movie>>();
 }
