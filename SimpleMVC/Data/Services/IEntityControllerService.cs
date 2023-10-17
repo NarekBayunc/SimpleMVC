@@ -8,6 +8,6 @@ namespace SimpleMVC.Data.Services
         Task<T?> GetByIdAsync(int id);
         Task AddAsync(T entity);
         Task RemoveAsync(int id);
-        Task<T> UpdateAsync(int id, T newEntity);
+        Task<T> UpdateAsync(T newEntity);
     }
 }

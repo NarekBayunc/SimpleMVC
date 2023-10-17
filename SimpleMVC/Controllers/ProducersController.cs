@@ -46,7 +46,7 @@ namespace SimpleMVC.Controllers
             return View(producer);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, Producer producer)
+        public async Task<IActionResult> Edit(Producer producer)
         {
             if (!ModelState.IsValid)
             {
@@ -54,7 +54,7 @@ namespace SimpleMVC.Controllers
             }
             else
             {
-                await service.UpdateAsync(id, producer);
+                await service.UpdateAsync(producer);
                 return RedirectToAction(nameof(Index));
             }
         }

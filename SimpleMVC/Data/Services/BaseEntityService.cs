@@ -35,7 +35,7 @@ namespace SimpleMVC.Data.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task<T> UpdateAsync(int id, T newEntity)
+        public async Task<T> UpdateAsync(T newEntity)
         {
             context.Set<T>().Update(newEntity);
             await context.SaveChangesAsync();

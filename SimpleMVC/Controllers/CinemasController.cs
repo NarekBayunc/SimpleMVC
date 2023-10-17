@@ -47,7 +47,7 @@ namespace SimpleMVC.Controllers
             return View(cinema);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, Cinema cinema)
+        public async Task<IActionResult> Edit(Cinema cinema)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace SimpleMVC.Controllers
             }
             else
             {
-                await service.UpdateAsync(id, cinema);
+                await service.UpdateAsync(cinema);
                 return RedirectToAction(nameof(Index));
             }
         }

@@ -27,6 +27,6 @@ void GetServices()
     builder.Services.AddControllersWithViews();
     builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
     builder.Services.AddScoped<IEntityControllerService<Actor>, BaseEntityService<Actor>>();
-    builder.Services.AddScoped<IEntityControllerService<Cinema>, BaseEntityService<Cinema>>();
+    builder.Services.AddScoped<IEntityControllerService<Cinema>, BaseEntityService<Cinema>>(); 
     builder.Services.AddScoped<IEntityControllerService<Producer>, BaseEntityService<Producer>>();
 }
