@@ -6,8 +6,8 @@ namespace SimpleMVC.Controllers
 {
     public class ActorsController : Controller
     {
-        private readonly IPersonService<Actor> service;
-        public ActorsController(IPersonService<Actor> service)
+        private readonly IEntityControllerService<Actor> service;
+        public ActorsController(IEntityControllerService<Actor> service)
         {
             this.service = service;
         }
@@ -36,14 +36,14 @@ namespace SimpleMVC.Controllers
         public async Task<IActionResult> Details(int id)
         {
             Actor? actor = await service.GetByIdAsync(id);
-            if (actor == null) return Redirect("/Actors/Index");
+            RedirectIfNull(actor);
             return View(actor);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             Actor? actor = await service.GetByIdAsync(id);
-            if (actor == null) return Redirect("/Actors/Index");
+            RedirectIfNull(actor);
             return View(actor);
         }
         [HttpPost]
@@ -63,16 +63,27 @@ namespace SimpleMVC.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             Actor? actor = await service.GetByIdAsync(id);
-            if (actor == null) return Redirect("/Actors/Index");
+            RedirectIfNull(actor);
             return View(actor);
         }
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Actor? actor = await service.GetByIdAsync(id);
-            if (actor == null) return Redirect("/Actors/Index");
+            await RedirectIfNullAsync(id);
             await service.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        public RedirectResult RedirectIfNull(Actor? actor)
+        {
+            if (actor == null) return Redirect("/Actors/Index");
+            else return null!;
+        }
+        public async Task<RedirectResult> RedirectIfNullAsync(int id)
+        {
+            Actor? actor = await service.GetByIdAsync(id);
+            if (actor == null) return Redirect("/Actors/Index");
+            else return null!;
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SimpleMVC.Data.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace SimpleMVC.Models
 {
-    public class Cinema
+    public class Cinema : IBaseEntity
     {
         public int Id { get; set; }
         [Display(Name = "Cinema Logo")]

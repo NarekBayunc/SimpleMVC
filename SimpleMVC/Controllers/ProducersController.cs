@@ -6,8 +6,8 @@ namespace SimpleMVC.Controllers
 {
     public class ProducersController : Controller
     {
-        private readonly IPersonService<Producer> service;
-        public ProducersController(IPersonService<Producer> service)
+        private readonly IEntityControllerService<Producer> service;
+        public ProducersController(IEntityControllerService<Producer> service)
         {
             this.service = service;
         }
@@ -35,14 +35,14 @@ namespace SimpleMVC.Controllers
         public async Task<IActionResult> Details(int id)
         {
             Producer? producer = await service.GetByIdAsync(id);
-            if (producer == null) return Redirect("/Producers/Index");
+            RedirectIfNull(producer);
             return View(producer);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             Producer? producer = await service.GetByIdAsync(id);
-            if (producer == null) return Redirect("/Producers/Index");
+            RedirectIfNull(producer);
             return View(producer);
         }
         [HttpPost]
@@ -62,16 +62,27 @@ namespace SimpleMVC.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             Producer? producer = await service.GetByIdAsync(id);
-            if (producer == null) return Redirect("/Producers/Index");
+            RedirectIfNull(producer);
             return View(producer);
         }
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Producer? producer = await service.GetByIdAsync(id);
-            if (producer == null) return Redirect("/Producers/Index");
+            await RedirectIfNullAsync(id);
             await service.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        public RedirectResult RedirectIfNull(Producer? producer)
+        {
+            if (producer == null) return Redirect("/Producers/Index");
+            else return null!;
+        }
+        public async Task<RedirectResult> RedirectIfNullAsync(int id)
+        {
+            Producer? producer = await service.GetByIdAsync(id);
+            if (producer == null) return Redirect("/Producers/Index");
+            else return null!;
         }
     }
 }

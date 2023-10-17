@@ -14,14 +14,9 @@ await AppDbInitializer.Seed(app);
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
-
-app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Movies}/{action=Index}/{id?}");
-
 
 app.Run();
 
@@ -31,6 +26,7 @@ void GetServices()
     string? connection = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddControllersWithViews();
     builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
-    builder.Services.AddScoped<IPersonService<Actor>, ActorsService>();
-    builder.Services.AddScoped<IPersonService<Producer>, ProducersService>();
+    builder.Services.AddScoped<IEntityControllerService<Actor>, BaseEntityService<Actor>>();
+    builder.Services.AddScoped<IEntityControllerService<Cinema>, BaseEntityService<Cinema>>();
+    builder.Services.AddScoped<IEntityControllerService<Producer>, BaseEntityService<Producer>>();
 }
