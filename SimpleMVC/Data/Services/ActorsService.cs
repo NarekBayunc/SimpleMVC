@@ -3,7 +3,7 @@ using SimpleMVC.Models;
 
 namespace SimpleMVC.Data.Services
 {
-    public class ActorsService : IActorService
+    public class ActorsService : IPersonService<Actor>
     {
         private readonly ApplicationContext context;
         public ActorsService(ApplicationContext context)

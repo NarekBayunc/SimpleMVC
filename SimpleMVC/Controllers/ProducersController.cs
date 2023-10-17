@@ -1,20 +1,77 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SimpleMVC.Data;
+using SimpleMVC.Data.Services;
+using SimpleMVC.Models;
 
 namespace SimpleMVC.Controllers
 {
     public class ProducersController : Controller
     {
-        private readonly ApplicationContext context;
-        public ProducersController(ApplicationContext context)
+        private readonly IPersonService<Producer> service;
+        public ProducersController(IPersonService<Producer> service)
         {
-            this.context = context;
+            this.service = service;
         }
         public async Task<IActionResult> Index()
         {
-            var data = await context.Producers.ToListAsync();
-            return View(data);
+            return View(await service.GetAllAsync());
+        }
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create([Bind("FullName, ProfilePictureURL, Bio")] Producer producer)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(producer);
+            }
+            else
+            {
+                await service.AddAsync(producer);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+        public async Task<IActionResult> Details(int id)
+        {
+            Producer? producer = await service.GetByIdAsync(id);
+            if (producer == null) return Redirect("/Producers/Index");
+            return View(producer);
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            Producer? producer = await service.GetByIdAsync(id);
+            if (producer == null) return Redirect("/Producers/Index");
+            return View(producer);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(int id, Producer producer)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(producer);
+            }
+            else
+            {
+                await service.UpdateAsync(id, producer);
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            Producer? producer = await service.GetByIdAsync(id);
+            if (producer == null) return Redirect("/Producers/Index");
+            return View(producer);
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            Producer? producer = await service.GetByIdAsync(id);
+            if (producer == null) return Redirect("/Producers/Index");
+            await service.RemoveAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
