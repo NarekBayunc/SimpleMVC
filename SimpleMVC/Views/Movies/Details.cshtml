@@ -1,0 +1,94 @@
+﻿@model Movie
+@using SimpleMVC.Controllers;
+@using SimpleMVC.Data.Enums
+
+@{
+    ViewData["Title"] = "Details of Movie";
+}
+<div class="row text">
+    <div class="col-md-8 offset-2">
+        <h1 style="text-align: center; margin-bottom: 20px;">Movie Details</h1>
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <div asp-validation-summary="ModelOnly" class="text-danger">
+                </div>
+                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                <div class="form-group text-center">
+                    <img class="border-info rounded-3" style="max-width: 250px" id="MovieImage" />
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="ImageUrl" class="control-label"></label>
+                    <input asp-for="ImageUrl" id="ImageUrl" class="form-control" readonly />
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" readonly />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" readonly />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input asp-for="StartDate" type="date" class="form-control" readonly />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="EndDate" class="control-label"></label>
+                    <input asp-for="EndDate" type="date" class="form-control" readonly />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+                <div class="form-group mb-3">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input asp-for="Price" type="number" step="0.01" class="form-control" readonly />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Producer"></label>
+                    <input asp-for="Producer.FullName" type="text" class="form-control" readonly />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Cinema"></label>
+                    @if (Model.Cinema != null)
+                    {
+                        <input asp-for="Cinema.Name" type="text" class="form-control" readonly />
+                    }
+                    else
+                    {
+                        <span class="text-muted">No Cinema assigned</span>
+                    }
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="MovieCategory"></label>
+                    <input asp-for="MovieCategory" type="text" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <a class="btn btn-outline-success float-end" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                    <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var output = document.getElementById('MovieImage');
+            output.src = $("#ImageUrl").val();
+        })
+
+        $("#ImageUrl").on("change", function () {
+            var output = document.getElementById('MovieImage');
+            output.src = $(this).val();
+        })
+    </script>
+}

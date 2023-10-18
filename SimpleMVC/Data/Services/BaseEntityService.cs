@@ -29,9 +29,9 @@ namespace SimpleMVC.Data.Services
             return await context.Set<T>().FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public IEnumerable<T> GetInlcudedListAsync(Expression<Func<T, object>> includeProperty)
+        public async Task<IEnumerable<T>> GetInlcudedListAsync(Expression<Func<T, object>> includeProperty)
         {
-            return context.Set<T>().Include(includeProperty);
+            return await context.Set<T>().Include(includeProperty).ToListAsync();
         }
 
         public async Task RemoveAsync(int id)

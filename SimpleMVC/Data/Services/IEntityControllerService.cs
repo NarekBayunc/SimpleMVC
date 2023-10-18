@@ -1,4 +1,6 @@
-﻿using SimpleMVC.Models;
+﻿using Microsoft.EntityFrameworkCore.Query;
+using SimpleMVC.Data.Base;
+using SimpleMVC.Models;
 using System.Linq.Expressions;
 
 namespace SimpleMVC.Data.Services
@@ -10,6 +12,6 @@ namespace SimpleMVC.Data.Services
         Task AddAsync(T entity);
         Task RemoveAsync(int id);
         Task<T> UpdateAsync(T newEntity);
-        IEnumerable<T> GetInlcudedListAsync(Expression<Func<T, object>> includeProperty);
+        Task<IEnumerable<T>> GetInlcudedListAsync(Expression<Func<T, object>> includeProperty);
     }
 }

@@ -78,6 +78,8 @@
                             </select>
                         </div>
                         <div class="form-group">
+                        <a class="btn btn-outline-danger float-end mx-1" asp-action="Delete" asp-route-id="@Model.Movie.Id">
+                            <i class="bi bi-trash"></i> Delete</a>
                             <input type="submit" value="Update" class="btn btn-outline-success float-end" />
                             <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
                         </div>

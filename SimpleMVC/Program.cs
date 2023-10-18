@@ -5,6 +5,8 @@ using SimpleMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// NEXT TASK IS DETAILS PAGE AND DELETING ACTION FOR MOVIES
+
 GetServices();
 
 var app = builder.Build();
