@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
 namespace SimpleMVC.Controllers
 {
+    [Authorize]
     public class ActorsController : Controller
     {
         private readonly IEntityControllerService<Actor> service;

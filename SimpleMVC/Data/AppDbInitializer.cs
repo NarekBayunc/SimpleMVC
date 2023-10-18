@@ -10,9 +10,23 @@ namespace SimpleMVC.Data
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<ApplicationContext>();
-                context!.Database.EnsureCreated();
+               context!.Database.EnsureCreated();
 
-                if (!context.Cinemas.Any())
+                if (!context.Users.Any())
+                {
+                    context.Users.AddRange(new List<User>()
+                    {
+                        new User()
+                        {
+                            Name = "test",
+                            Email = "vip@gmail.com",
+                            Password = "123",
+                            Role = UserRole.Default,
+                        }
+                    });
+                }
+
+                    if (!context.Cinemas.Any())
                 {
                     context.Cinemas.AddRange(new List<Cinema>()
                     {

@@ -5,6 +5,13 @@
 }
 
 <div class="row">
+
+    @if ((string)TempData["LoggedIn"]! == "True")
+    {
+        <div id="successAlert" class="alert alert-success text-center" style="display:none;">
+            You have successfully logged in.
+        </div>
+    }
     @foreach (var movie in Model)
     {
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
@@ -62,3 +69,11 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#successAlert').fadeIn().delay(3000).fadeOut();
+        });
+    </script>
+}

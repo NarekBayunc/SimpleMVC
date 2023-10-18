@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
@@ -5,7 +6,6 @@ using SimpleMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// NEXT TASK IS DETAILS PAGE AND DELETING ACTION FOR MOVIES
 
 GetServices();
 
@@ -15,6 +15,9 @@ await AppDbInitializer.Seed(app);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
@@ -32,4 +35,13 @@ void GetServices()
     builder.Services.AddScoped<IEntityControllerService<Cinema>, BaseEntityService<Cinema>>(); 
     builder.Services.AddScoped<IEntityControllerService<Producer>, BaseEntityService<Producer>>();
     builder.Services.AddScoped<IEntityControllerService<Movie>, BaseEntityService<Movie>>();
+    builder.Services.AddScoped<UserService>();
+    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                                        .AddCookie(
+                                        option =>
+                                        {
+                                            option.LoginPath = "/Auth/Login";
+                                            option.ExpireTimeSpan = TimeSpan.FromMinutes(1);
+                                            option.AccessDeniedPath = "/Auth/Login";
+                                        });
 }

@@ -1,0 +1,60 @@
+﻿@model User
+@{
+    ViewData["Title"] = "Login Page";
+}
+<div class="row text">
+    <div class="col-md-8 offset-2">
+
+        <h1 style="text-align: center;">Log In</h1>
+
+        <div class="row">
+            @if (TempData.ContainsKey("ErrorMessage"))
+            {
+                <div class="alert alert-danger mx-auto" style="max-width: 300px;">
+                    @TempData["ErrorMessage"]
+                </div>
+            } 
+            <div class="col-md-8 offset-2">
+                <form asp-action="Login">
+                    <div asp-validation-summary="ModelOnly" class="text-danger">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control input-field" id="NameInput" placeholder="Login"/>
+                        <span asp-validation-for="Name" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control input-field" id="EmailInput" placeholder="Email" />
+                        <span asp-validation-for="Email" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" type="password" id="PassInput" class="form-control input-field" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Log In" class="btn btn-outline-success float-end" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+ @if (TempData.ContainsKey("ErrorMessage"))
+{
+    @section Scripts {
+        <script>
+        $(document).ready(function () {
+            var inputElements = $('.input-field');
+            inputElements.addClass('is-invalid');
+            inputElements.focus(function () {
+                $(this).removeClass('is-invalid');
+                $('.input-span').text('');
+            });
+        });
+        </script> 
+    }
+}

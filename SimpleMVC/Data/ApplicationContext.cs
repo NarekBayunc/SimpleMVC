@@ -6,6 +6,7 @@ namespace SimpleMVC.Data
     public class ApplicationContext : DbContext
     {
         public DbSet<Movie> Movies { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Actor> Actors { get; set; }
         public DbSet<ActorMovie> ActorsMovies { get; set; }
         public DbSet<Cinema> Cinemas { get; set; }

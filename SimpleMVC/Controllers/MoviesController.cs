@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
 namespace SimpleMVC.Controllers
 {
+    [Authorize]
     public class MoviesController : Controller
     {
         private readonly IEntityControllerService<Movie> movieService;
@@ -61,8 +63,11 @@ namespace SimpleMVC.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            Movie? data = (await movieService.GetInlcudedListAsync(m => m.Cinema!)).FirstOrDefault(m => m.Id == id);
-            data = (await movieService.GetInlcudedListAsync(p => p.Producer!)).FirstOrDefault(p => p.Id == id);
+            Movie? data = (await movieService.GetInlcudedListAsync(m => m.Cinema!)).
+                                FirstOrDefault(m => m.Id == id);
+            data = (await movieService.GetInlcudedListAsync(p => p.Producer!)).
+                                  FirstOrDefault(p => p.Id == id);
+
             if (data == null) return Redirect("/Movies/Index");
             else
             {
