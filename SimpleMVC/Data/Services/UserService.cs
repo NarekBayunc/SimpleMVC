@@ -15,21 +15,25 @@ namespace SimpleMVC.Data.Services
         }
         public async Task AddAsync(User user)
         {
+            user.Password = Helper.HashPassword(user.Password!);
             await context.Users.AddAsync(user);
             await context.SaveChangesAsync();
         }
-
-        public User? GetUser(User user)
+        public async Task<User?> GetUser(User user)
         {
-            return context.Users.FirstOrDefault(u => u.Name == user.Name &&
-                                                         u.Password == user.Password &&
-                                                         u.Email == user.Email);
-        }
+            User? targetUser = await context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
 
+            if (targetUser?.Password == null ||
+                user.Password == null ||
+                !Helper.VerifyPassword(targetUser.Password, user.Password))
+            {
+                return null;
+            }
+            return targetUser;
+        }
         public async Task<User?> GetByIdAsync(int id)
         {
             return await context.Users.FirstOrDefaultAsync(a => a.Id == id);
         }
-
     }
 }

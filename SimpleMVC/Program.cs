@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
@@ -41,7 +42,7 @@ void GetServices()
                                         option =>
                                         {
                                             option.LoginPath = "/Auth/Login";
-                                            option.ExpireTimeSpan = TimeSpan.FromMinutes(1);
+                                            option.ExpireTimeSpan = TimeSpan.FromMinutes(5);
                                             option.AccessDeniedPath = "/Auth/Login";
                                         });
 }

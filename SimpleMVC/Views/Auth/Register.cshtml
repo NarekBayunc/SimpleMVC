@@ -1,11 +1,11 @@
 ﻿@model User
 @{
-    ViewData["Title"] = "Login Page";
+    ViewData["Title"] = "Sign In";
 }
 <div class="row text">
     <div class="col-md-8 offset-2">
 
-        <h1 style="text-align: center;">Log In</h1>
+        <h1 style="text-align: center;">Sign In</h1>
 
         <div class="row">
             @if (TempData.ContainsKey("ErrorMessage"))
@@ -14,13 +14,8 @@
                     @TempData["ErrorMessage"]
                 </div>
             }
-            @if (TempData.ContainsKey("LoggedOut")){
-                <div class="alert alert-info mx-auto" style="max-width: 300px;">
-                    @TempData["LoggedOut"]
-                </div>
-            }
             <div class="col-md-8 offset-2">
-                <form asp-action="Login">
+                <form asp-action="Register">
                     <div asp-validation-summary="ModelOnly" class="text-danger">
                     </div>
                     <div class="form-group mb-3">
@@ -40,10 +35,10 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <div>
-                            <a asp-action="Register">Need an account? Sign In</a>
+                            <a asp-action="Login">Already have an account? Log In</a>
                         </div>
                         <div class="form-group">
-                            <input type="submit" value="Log In" class="btn btn-outline-success float-end" />
+                            <input type="submit" value="Sign In" class="btn btn-outline-success float-end" />
                         </div>
                     </div>
                 </form>

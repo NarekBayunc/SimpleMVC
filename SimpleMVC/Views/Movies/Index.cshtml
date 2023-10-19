@@ -6,10 +6,10 @@
 
 <div class="row">
 
-    @if ((string)TempData["LoggedIn"]! == "True")
+    @if ((string)TempData["SignedIn"]! == "True")
     {
         <div id="successAlert" class="alert alert-success text-center" style="display:none;">
-            You have successfully logged in.
+            You have successfully created an account.
         </div>
     }
     @foreach (var movie in Model)
