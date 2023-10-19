@@ -36,5 +36,27 @@ namespace SimpleMVC.Data.Services
         {
             return await context.Users.FirstOrDefaultAsync(a => a.Id == id);
         }
+        public async Task<bool> UpdateAsync(int id, User user)
+        {
+            var userFromDb = await context.Users.FirstOrDefaultAsync(a => a.Id == id);
+            userFromDb.Login = user.Login;
+            userFromDb.Name = user.Name;
+            userFromDb.Age = user.Age;
+            userFromDb.Email = user.Email;
+            if (user != null)
+            {
+                context.Users.Update(userFromDb);
+                await context.SaveChangesAsync();
+                return true;
+            }
+            else 
+            {
+                return false;
+            }
+        }
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await context.Users.FirstOrDefaultAsync(a => a.Email == email);
+        }
     }
 }

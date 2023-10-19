@@ -86,7 +86,7 @@ namespace SimpleMVC.Controllers
             AuthenticationProperties authProp = new AuthenticationProperties()
             {
                 AllowRefresh = true,
-                IsPersistent = false
+                IsPersistent = true
             };
             await HttpContext.SignInAsync(authScheme, new ClaimsPrincipal(identity), authProp);
         }

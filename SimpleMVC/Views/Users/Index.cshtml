@@ -1,0 +1,44 @@
+﻿@model User
+@{
+    ViewData["Title"] = "User Profile";
+}
+<div class="row text">
+    <div class="col-md-8 offset-2">
+
+        <h1 style="text-align: center;">@Model.Name 's Profile</h1>
+
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control input-field" value="@Model.Name" readonly />
+                        <span asp-validation-for="Name" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Age" class="control-label"></label>
+                        <input asp-for="Age" class="form-control input-field" value="@Model.Age" type="number" step="1" readonly />
+                        <span asp-validation-for="Age" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Login" class="control-label"></label>
+                        <input asp-for="Login" class="form-control input-field" value="@Model.Login" readonly />
+                        <span asp-validation-for="Login" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control input-field" value="@Model.Email" readonly />
+                        <span asp-validation-for="Email" class="text-danger input-span"></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="form-group">
+                            <a asp-controller="Movies" asp-action="Index" class="btn btn-outline-secondary float-start" >Back</a>
+                        </div>
+                        <div class="form-group">
+                            <a asp-controller="Users" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-success float-end" >Edit</a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+    </div>
+</div>

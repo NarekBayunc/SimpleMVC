@@ -1,0 +1,71 @@
+﻿@model User
+@{
+    ViewData["Title"] = "User Profile";
+}
+<div class="row text">
+    <div class="col-md-8 offset-2">
+
+        <h1 style="text-align: center;">@Model.Name 's Profile</h1>
+
+        <div class="row">
+            @if (TempData.ContainsKey("ErrorMessage"))
+            {
+                <div class="alert alert-danger mx-auto" style="max-width: 300px;">
+                    @TempData["ErrorMessage"]
+                </div>
+            } 
+            <div class="col-md-8 offset-2">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control input-field" />
+                        <span asp-validation-for="Name" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Age" class="control-label"></label>
+                        <input asp-for="Age" class="form-control input-field" type="number" step="1" />
+                        <span asp-validation-for="Age" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Login" class="control-label"></label>
+                        <input asp-for="Login" class="form-control input-field" />
+                        <span asp-validation-for="Login" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control input-field" />
+                        <span asp-validation-for="Email" class="text-danger input-span"></span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="form-group">
+                            <a asp-controller="Movies" asp-action="Index" class="btn btn-outline-secondary float-start" >Back</a>
+                        </div>
+                        <div class="form-group d-flex justify-content-end">
+                            <a asp-controller="Users" asp-action="Index" class="btn btn-outline-danger mx-2">Cancel</a> 
+                            <input type="submit" value="Confirm" class="btn btn-outline-success" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+ @if (TempData.ContainsKey("ErrorMessage"))
+{
+    @section Scripts {
+    <script>
+        $(document).ready(function () {
+            var inputElements = $('.input-field');
+            inputElements.addClass('is-invalid');
+            inputElements.focus(function () {
+                $(this).removeClass('is-invalid');
+                $('.input-span').text('');
+            });
+        });
+    </script>
+    }
+} 
