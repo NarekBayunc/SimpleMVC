@@ -38,18 +38,19 @@ namespace SimpleMVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([Bind("Name,Email,Password")]User user)
+        public async Task<IActionResult> Login(User user)
         { 
             User? currentUser = await service.GetUser(user);
-            if (currentUser == null || !ModelState.IsValid)
+            if (currentUser == null)
             {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
                 TempData["ErrorMessage"] = "Invalid data input, please try again";
                 return View(user);
             }
             else
             {
                 await LogInViaCookie(currentUser);
-                return RedirectToAction("Index", "Movies", TempData["LoggedIn"]="True");
+                return RedirectToAction("Index", "Movies", TempData["LoggedIn"]=currentUser.Name);
             }
         }
         [AllowAnonymousOnly]
@@ -59,7 +60,7 @@ namespace SimpleMVC.Controllers
         }
         [AllowAnonymousOnly]
         [HttpPost]
-        public async Task<IActionResult> Register([Bind("Name,Email,Password")]User user)
+        public async Task<IActionResult> Register([Bind("Name,Age,Login,Email,Password")]User user)
         {
             if (user == null || !ModelState.IsValid)
             {
@@ -71,14 +72,14 @@ namespace SimpleMVC.Controllers
                 await service.AddAsync(user);
                 await LogInViaCookie(user);
             }
-            return RedirectToAction("Index", "Movies", TempData["SignedIn"] = "True");
+            return RedirectToAction("Index", "Movies", TempData["SignedIn"] = user.Name);
         }
 
         public async Task LogInViaCookie(User user)
         {
             string authScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             List<Claim>? claims = new List<Claim>()
-                            { new Claim(ClaimTypes.Name, user.Name!),
+                            { new Claim(ClaimTypes.Name, user.Login!),
                               new Claim(ClaimTypes.Email, user.Email!)
                             };
             ClaimsIdentity? identity = new ClaimsIdentity(claims, authScheme);

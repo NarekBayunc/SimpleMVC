@@ -6,10 +6,16 @@
 
 <div class="row">
 
-    @if ((string)TempData["SignedIn"]! == "True")
+    @if (TempData.ContainsKey("SignedIn"))
     {
         <div id="successAlert" class="alert alert-success text-center" style="display:none;">
-            You have successfully created an account.
+            Hello @TempData["SignedIn"], you have successfully created an account.
+        </div>
+    }
+    @if (TempData.ContainsKey("LoggedIn"))
+    {
+        <div id="successAlert" class="alert alert-success text-center" style="display:none;">
+            Hello @TempData["LoggedIn"] , you are successfuly Logged In
         </div>
     }
     @foreach (var movie in Model)

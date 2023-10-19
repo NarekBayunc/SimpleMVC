@@ -21,7 +21,8 @@ namespace SimpleMVC.Data.Services
         }
         public async Task<User?> GetUser(User user)
         {
-            User? targetUser = await context.Users.FirstOrDefaultAsync(u => u.Email == user.Email);
+            User? targetUser = await context.Users.FirstOrDefaultAsync(u => u.Email == user.Email
+                                                                        && u.Login == user.Login);
 
             if (targetUser?.Password == null ||
                 user.Password == null ||

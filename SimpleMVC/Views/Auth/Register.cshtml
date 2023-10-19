@@ -20,12 +20,22 @@
                     </div>
                     <div class="form-group mb-3">
                         <label asp-for="Name" class="control-label"></label>
-                        <input asp-for="Name" class="form-control input-field" id="NameInput" placeholder="Login"/>
+                        <input asp-for="Name" class="form-control input-field" id="NameInput" placeholder="Name"/>
                         <span asp-validation-for="Name" class="text-danger input-span"></span>
                     </div>
                     <div class="form-group mb-3">
+                        <label asp-for="Age" class="control-label"></label>
+                        <input asp-for="Age" class="form-control input-field" type="number" step="1" placeholder="Age" />
+                        <span asp-validation-for="Age" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Login" class="control-label"></label>
+                        <input asp-for="Login" class="form-control input-field" placeholder="Login" />
+                        <span asp-validation-for="Login" class="text-danger input-span"></span>
+                    </div>
+                    <div class="form-group mb-3">
                         <label asp-for="Email" class="control-label"></label>
-                        <input asp-for="Email" class="form-control input-field" id="EmailInput" placeholder="Email" />
+                        <input asp-for="Email" class="form-control input-field" placeholder="Email" />
                         <span asp-validation-for="Email" class="text-danger input-span"></span>
                     </div>
                     <div class="form-group mb-3">

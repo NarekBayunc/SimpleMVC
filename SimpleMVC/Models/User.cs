@@ -8,10 +8,15 @@ namespace SimpleMVC.Models
     {
         [Key]
         public int Id { get; set; }
-        [Display(Name="Login")]
         [Required(ErrorMessage = "Name is required")]
         [MinLength(3, ErrorMessage = "Name must have at least 3 characters")]
         public string? Name { get; set; }
+        [Required(ErrorMessage = "Age is required")]
+        [Range(6, 100, ErrorMessage = "You must be at least 6 years old")]
+        public int Age { get; set; }
+        [Required(ErrorMessage = "Login is required")]
+        [MinLength(3, ErrorMessage = "Login must have at least 3 characters")]
+        public string? Login { get; set; }
         [Required(ErrorMessage = "Email is required")]
         [RegularExpression(@"^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$",
             ErrorMessage = "Invalid email address")]
