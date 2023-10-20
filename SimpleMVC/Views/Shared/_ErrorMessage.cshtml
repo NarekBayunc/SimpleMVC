@@ -1,0 +1,6 @@
+﻿@if (TempData.ContainsKey("ErrorMessage"))
+{
+    <div class="alert alert-danger mx-auto" style="max-width: 300px;">
+        @TempData["ErrorMessage"]
+    </div>
+}

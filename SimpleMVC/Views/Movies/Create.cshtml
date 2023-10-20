@@ -1,0 +1,96 @@
+﻿@model Movie
+@using SimpleMVC.Controllers;
+@using SimpleMVC.Data.Enums
+@using SimpleMVC.Data;
+
+@{
+    ViewData["Title"] = "Adding a Movie";
+    var cinemas = ViewBag.Cinemas as IEnumerable<Cinema>;
+    var producers = ViewBag.Producers as IEnumerable<Producer>;
+}
+<div class="row text">
+    <div class="col-md-8 offset-2">
+        <h1 style="text-align: center; margin-bottom: 20px;">Adding a Movie</h1>
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger">
+                    </div>
+                    <div class="form-group text-center">
+                        <img class="border-info rounded-3" style="max-width: 250px" id="MovieImage" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="ImageUrl" class="control-label"></label>
+                        <input asp-for="ImageUrl" id="ImageUrl" class="form-control" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input asp-for="StartDate" type="date" class="form-control" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input asp-for="EndDate" type="date" class="form-control" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" type="number" step="0.01" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Producer"></label>
+                        <select asp-for="ProducerId" class="form-control">
+                            @foreach (var producer in producers!)
+                            {
+                                <option value="@producer.Id">@producer.FullName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="ProducerId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Cinema"></label>
+                        <select asp-for="CinemaId" class="form-control">
+                            @foreach (var cinema in cinemas!)
+                            {
+                                <option value="@cinema.Id">@cinema.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CinemaId" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="MovieCategory"></label>
+                        <select asp-for="MovieCategory" class="form-control">
+                            @foreach (var category in Enum.GetValues(typeof(MovieCategory)))
+                            {
+                                <option value="@category">@category</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Add" class="btn btn-outline-success float-end" />
+                        <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+

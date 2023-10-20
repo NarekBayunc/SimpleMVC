@@ -8,12 +8,7 @@
         <h1 style="text-align: center;">Log In</h1>
 
         <div class="row">
-            @if (TempData.ContainsKey("ErrorMessage"))
-            {
-                <div class="alert alert-danger mx-auto" style="max-width: 300px;">
-                    @TempData["ErrorMessage"]
-                </div>
-            }
+            @Html.Partial("_ErrorMessage");
             @if (TempData.ContainsKey("LoggedOut")){
                 <div class="alert alert-info mx-auto" style="max-width: 300px;">
                     @TempData["LoggedOut"]
@@ -52,19 +47,3 @@
 
     </div>
 </div>
-
- @if (TempData.ContainsKey("ErrorMessage"))
-{
-    @section Scripts {
-        <script>
-        $(document).ready(function () {
-            var inputElements = $('.input-field');
-            inputElements.addClass('is-invalid');
-            inputElements.focus(function () {
-                $(this).removeClass('is-invalid');
-                $('.input-span').text('');
-            });
-        });
-        </script> 
-    }
-}

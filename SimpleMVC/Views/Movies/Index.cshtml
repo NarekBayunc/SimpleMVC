@@ -18,6 +18,12 @@
             Hello @TempData["LoggedIn"] , you are successfuly Logged In
         </div>
     }
+    @if (TempData.ContainsKey("IsMovieAdded"))
+    {
+        <div id="successAlert" class="alert alert-success text-center" style="display:none;">
+            New movie are successfuly Added.
+        </div>
+    }
     @foreach (var movie in Model)
     {
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
@@ -74,12 +80,12 @@
             </div>
         </div>
     }
+    <div>
+        <a style="position: fixed; right: 25px; bottom: 70px;" asp-controller="Movies" asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"> Add New</i></a>
+    </div>
 </div>
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            $('#successAlert').fadeIn().delay(3000).fadeOut();
-        });
     </script>
 }

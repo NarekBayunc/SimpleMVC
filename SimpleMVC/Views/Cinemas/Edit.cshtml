@@ -43,16 +43,3 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            var output = document.getElementById('CinemaPicturePreview');
-            output.src = $("#Logo").val();
-        })
-
-        $("#Logo").on("change", function () {
-            var output = document.getElementById('CinemaPicturePreview');
-            output.src = $(this).val();
-        })
-    </script>
-}

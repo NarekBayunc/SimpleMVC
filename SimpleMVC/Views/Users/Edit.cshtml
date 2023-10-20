@@ -8,12 +8,7 @@
         <h1 style="text-align: center;">@Model.Name 's Profile</h1>
 
         <div class="row">
-            @if (TempData.ContainsKey("ErrorMessage"))
-            {
-                <div class="alert alert-danger mx-auto" style="max-width: 300px;">
-                    @TempData["ErrorMessage"]
-                </div>
-            } 
+            @Html.Partial("_ErrorMessage")
             <div class="col-md-8 offset-2">
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="text-danger">
@@ -54,18 +49,4 @@
     </div>
 </div>
 
- @if (TempData.ContainsKey("ErrorMessage"))
-{
-    @section Scripts {
-    <script>
-        $(document).ready(function () {
-            var inputElements = $('.input-field');
-            inputElements.addClass('is-invalid');
-            inputElements.focus(function () {
-                $(this).removeClass('is-invalid');
-                $('.input-span').text('');
-            });
-        });
-    </script>
-    }
-} 
+ 

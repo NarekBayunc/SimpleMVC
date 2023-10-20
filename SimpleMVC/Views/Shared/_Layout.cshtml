@@ -21,7 +21,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="Index"><i class="bi bi-film"></i> Movies</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="badge-info bi-gear"></i> Management
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -64,3 +64,51 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+@if (TempData.ContainsKey("ErrorMessage"))
+{
+    <script>
+        $(document).ready(function () {
+            var inputElements = $('.input-field');
+            inputElements.addClass('is-invalid');
+            inputElements.focus(function () {
+                $(this).removeClass('is-invalid');
+                $('.input-span').text('');
+            });
+        });
+
+    </script>
+}
+
+<script>
+    $(document).ready(function () {
+        var output = document.getElementById('ProfilePicturePreview');
+        output.src = $("#ProfilePictureURL").val();
+    })
+
+    $("#ProfilePictureURL").on("change", function () {
+        var output = document.getElementById('ProfilePicturePreview');
+        output.src = $(this).val();
+    })
+
+    $(document).ready(function () {
+        var output = document.getElementById('CinemaPicturePreview');
+        output.src = $("#Logo").val();
+    })
+
+    $("#Logo").on("change", function () {
+        var output = document.getElementById('CinemaPicturePreview');
+        output.src = $(this).val();
+    })
+
+    $(document).ready(function () {
+        var output = document.getElementById('MovieImage');
+        output.src = $("#ImageUrl").val();
+    })
+
+    $("#ImageUrl").on("change", function () {
+        var output = document.getElementById('MovieImage');
+        output.src = $(this).val();
+    })
+</script>
+

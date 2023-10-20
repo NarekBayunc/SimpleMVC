@@ -7,8 +7,6 @@ using SimpleMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// PRODUCERS EDIT BUG NAME SAVED WITHOUT DATA
-
 GetServices();
 
 var app = builder.Build();

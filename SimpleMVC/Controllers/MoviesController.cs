@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SimpleMVC.Controllers
 {
@@ -81,6 +82,41 @@ namespace SimpleMVC.Controllers
             return RedirectToAction(nameof(Index));
 
         }
+
+        public async Task<IActionResult> Create()
+        {
+            await SetViewBagForMovieAdd();
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(Movie movie)
+        {
+            await SetViewBagForMovieAdd();
+            if (!ModelState.IsValid)
+            {
+                return View(movie);
+            }
+            else
+            {
+                movie.Producer = await producerService.GetByIdAsync(movie.ProducerId);
+                movie.Cinema = await cinemaService.GetByIdAsync(movie.CinemaId);
+                await movieService.AddAsync(movie);
+                return RedirectToAction("Index","Movies", ViewData["IsMovieAdded"] = "True");
+            }
+        }
+        public async Task<IEnumerable<Producer>> GetProducersAsync()
+        {
+            return await producerService.GetAllAsync();
+    }
+        public async Task<IEnumerable<Cinema>> GetCinemasAsync()
+        {
+            return await cinemaService.GetAllAsync();
+        }
+        public async Task SetViewBagForMovieAdd()
+        {
+            ViewBag.Producers = await GetProducersAsync();
+            ViewBag.Cinemas = await GetCinemasAsync();
+        }
     }
 
     public class MovieViewModel
@@ -89,4 +125,5 @@ namespace SimpleMVC.Controllers
         public required IEnumerable<Producer> Producers { get; set; }
         public required IEnumerable<Cinema> Cinemas { get; set; }
     }
+    
 }

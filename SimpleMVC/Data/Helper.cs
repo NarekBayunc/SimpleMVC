@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.EntityFrameworkCore;
+using SimpleMVC.Models;
 using System.Security.Cryptography;
 
 namespace SimpleMVC.Data

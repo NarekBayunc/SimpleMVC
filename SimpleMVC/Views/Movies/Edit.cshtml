@@ -91,16 +91,3 @@
     </div>
 
 
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            var output = document.getElementById('MovieImage');
-            output.src = $("#ImageUrl").val();
-        })
-
-        $("#ImageUrl").on("change", function () {
-            var output = document.getElementById('MovieImage');
-            output.src = $(this).val();
-        })
-    </script>
-}

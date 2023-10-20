@@ -24,6 +24,16 @@ namespace SimpleMVC.Data.Services
             return await context.Set<T>().ToListAsync();
         }
 
+        public async Task<T> GetAny()
+        {
+            if (context.Set<T>().Any())
+            {
+                T? data = await context.Set<T>().FirstOrDefaultAsync();
+                return data!;
+            }
+            return null!;
+        }
+
         public async Task<T?> GetByIdAsync(int id)
         {
             return await context.Set<T>().FirstOrDefaultAsync(a => a.Id == id);

@@ -1,5 +1,6 @@
 ﻿using SimpleMVC.Data.Base;
 using SimpleMVC.Data.Enums;
+using SimpleMVC.Data.ValidationAttributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace SimpleMVC.Models
@@ -21,7 +22,16 @@ namespace SimpleMVC.Models
         [Display(Name = "Movie Picture ")]
         [Required(ErrorMessage = "Movie Picture is required")]
         public string? ImageUrl { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Start Date")]
+        [Required(ErrorMessage = "Start Date is required")]
+        [DataType(DataType.Date)]
+        [MaxDate(9, ErrorMessage = "Start Date must be on or before 2030-12-31")]
         public DateTime StartDate { get; set; }
+        [Display(Name = "End Date")]
+        [Required(ErrorMessage = "End Date is required")]
+        [DataType(DataType.Date)]
+        [MaxDate(9, ErrorMessage = "End Date must be on or before 2030-12-31")]
         public DateTime EndDate { get; set; }
         public MovieCategory MovieCategory { get; set; }
         public List<ActorMovie>? Actors_Movies { get; set; }
