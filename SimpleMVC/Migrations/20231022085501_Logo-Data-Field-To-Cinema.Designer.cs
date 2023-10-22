@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimpleMVC.Data;
 
@@ -11,9 +12,11 @@ using SimpleMVC.Data;
 namespace SimpleMVC.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20231022085501_Logo-Data-Field-To-Cinema")]
+    partial class LogoDataFieldToCinema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,7 +48,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Actors", (string)null);
+                    b.ToTable("Actors");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.ActorMovie", b =>
@@ -60,7 +63,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("ActorsMovies", (string)null);
+                    b.ToTable("ActorsMovies");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.Cinema", b =>
@@ -90,7 +93,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cinemas", (string)null);
+                    b.ToTable("Cinemas");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.Movie", b =>
@@ -138,7 +141,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasIndex("ProducerId");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.Producer", b =>
@@ -164,7 +167,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Producers", (string)null);
+                    b.ToTable("Producers");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.User", b =>
@@ -199,7 +202,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.ActorMovie", b =>

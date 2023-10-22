@@ -9,7 +9,7 @@
         <table class="table">
             <thead>
                 <tr class="text-center">
-                    <th>@Html.DisplayNameFor(model => model.Logo)</th>
+                    <th>@Html.DisplayNameFor(model => model.LogoData)</th>
                     <th>@Html.DisplayNameFor(model => model.Name)</th>
                     <th>@Html.DisplayNameFor(model => model.Description)</th>
                     <th>Actions</th>
@@ -20,8 +20,7 @@
                 {
                     <tr>
                         <td>
-                            <img class="rounded-circle" src="@item.Logo" alt="@item.Name"
-                                 style="max-width: 150px">
+                            <img class="rounded-circle cinema-image" src="data:image/png;base64,@Convert.ToBase64String(item.LogoData!)" alt="@item.Name">
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Name)
