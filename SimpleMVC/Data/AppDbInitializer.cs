@@ -9,7 +9,7 @@ namespace SimpleMVC.Data
         {
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
             {
-                var context = serviceScope.ServiceProvider.GetService<ApplicationContext>();
+               var context = serviceScope.ServiceProvider.GetService<ApplicationContext>();
                context!.Database.EnsureCreated();
 
                 if (!context.Users.Any())
@@ -18,48 +18,50 @@ namespace SimpleMVC.Data
                     {
                         new User()
                         {
-                            Name = "test",
-                            Email = "vip@gmail.com",
-                            Password = "123",
+                            Name = "123",
+                            Email = "123@gmail.com",
+                            Login = "123",
+                            Password = Helper.HashPassword("123"),
                             Role = UserRole.Default,
                         }
                     });
+                    await context.SaveChangesAsync();
                 }
 
-                    if (!context.Cinemas.Any())
+                if (!context.Cinemas.Any())
                 {
                     context.Cinemas.AddRange(new List<Cinema>()
                     {
                         new Cinema()
                         {
                             Name = "Cinema 1",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-1.jpeg",
-                            Description = "This is the description of the first cinema"
+                            Description = "This is the description of the first cinema",
+                            LogoData = Helper.FromImgToBytes("wwwroot/img/cinema-1.jpg")
                         },
                         new Cinema()
                         {
                             Name = "Cinema 2",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-2.jpeg",
-                            Description = "This is the description of the second cinema"
+                            Description = "This is the description of the second cinema",
+                            LogoData = Helper.FromImgToBytes("wwwroot/img/cinema-2.jpg")
                         },
                         new Cinema()
                         {
                             Name = "Cinema 3",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-3.jpeg",
-                            Description = "This is the description of the third cinema"
+                            Description = "This is the description of the third cinema",
+                            LogoData = Helper.FromImgToBytes("wwwroot/img/cinema-3.jpg")
                         },
                         new Cinema()
                         {
                             Name = "Cinema 4",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-4.jpeg",
-                            Description = "This is the description of the fourth cinema"
+                            Description = "This is the description of the fourth cinema",
+                            LogoData = Helper.FromImgToBytes("wwwroot/img/cinema-4.jpg")
                         },
                         new Cinema()
                         {
                             Name = "Cinema 5",
-                            Logo = "http://dotnethow.net/images/cinemas/cinema-5.jpeg",
-                            Description = "This is the description of the fifth cinema"
-                        },
+                            Description = "This is the description of the fifth cinema",
+                            LogoData = Helper.FromImgToBytes("wwwroot/img/cinema-5.jpg")
+                        }
                     });
                     await context.SaveChangesAsync();
                 }

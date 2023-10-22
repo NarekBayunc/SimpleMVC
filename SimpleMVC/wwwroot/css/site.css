@@ -24,3 +24,7 @@ body {
 .MovieImage {
     width: 100%;
 }
+.cinema-image {
+    width: 150px;
+    height: 150px;
+}

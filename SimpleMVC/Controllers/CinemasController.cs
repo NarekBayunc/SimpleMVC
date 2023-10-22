@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
@@ -22,17 +24,23 @@ namespace SimpleMVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Name, Logo, Description")] Cinema cinema)
+        public async Task<IActionResult> Create([Bind("Name, Description, LogoData")] Cinema cinema,
+                                                IFormFile? logoData)
         {
-            if (!ModelState.IsValid)
+            if (logoData == null && !(logoData?.Length > 0))
             {
-                return View(cinema);
+                cinema.LogoData = Helper.DefaultImageForLogo();
             }
             else
+            {
+                cinema.LogoData = Helper.FromImgToBytes(logoData);
+            }
+            if (ModelState.IsValid)
             {
                 await service.AddAsync(cinema);
                 return RedirectToAction(nameof(Index));
             }
+            return View(cinema);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -49,8 +57,12 @@ namespace SimpleMVC.Controllers
             return View(cinema);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Cinema cinema)
+        public async Task<IActionResult> Edit(Cinema cinema,
+                                              IFormFile? logoData,
+                                              string logoDataString)
         {
+            byte[]? imageData = Helper.FromImgToBytes(logoData, logoDataString);
+            cinema.LogoData = imageData;
             if (!ModelState.IsValid)
             {
                 return View(cinema);

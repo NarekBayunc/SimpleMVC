@@ -11,16 +11,16 @@
 
         <div class="row">
             <div class="col-md-8 offset-2">
-                <form asp-action="Edit">
+                <form asp-action="Edit" enctype="multipart/form-data" id="editForm">
                     <div asp-validation-summary="ModelOnly" class="text-danger">
+                        <input type="hidden" asp-for="Id" />
                     </div>
                     <div class="form-group text-center">
-                        <img class="border-info rounded-circle" style="max-width: 150px" id="CinemaPicturePreview" />
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Logo" class="control-label"></label>
-                        <input asp-for="Logo" class="form-control" />
-                        <span asp-validation-for="Logo" class="text-danger"></span>
+                        @{
+                            var base64String = Model.LogoData != null ? Convert.ToBase64String(Model.LogoData) : string.Empty;
+                        }
+                        <img class="border-info rounded-circle cinema-image" id="CinemaPicturePreview"
+                             src="data:image/png;base64,@base64String" />
                     </div>
                     <div class="form-group mb-3">
                         <label asp-for="Name" class="control-label"></label>
@@ -32,9 +32,14 @@
                         <input asp-for="Description" class="form-control" />
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
+                    <div class="form-group mb-3 custom-file">
+                        <label asp-for="LogoData" class="custom-file-label me-2">Select image for Cinema Logo</label>
+                        <input asp-for="LogoData" type="file" class="custom-file-input" id="Logo">
+                    </div>
                     <div class="form-group">
-                        <input type="submit" value="Update" class="btn btn-outline-success float-end" />
+                        <input type="button" value="Update" class="btn btn-outline-success float-end" onclick="updateForm()" />
                         <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                        <input type="hidden" name="logoDataString" value="@Convert.ToBase64String(Model.LogoData!)" />
                     </div>
                 </form>
             </div>
@@ -43,3 +48,23 @@
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        function updateForm() {
+            var newImage = document.getElementById('Logo').files[0];
+            if (newImage) {
+                var output = document.getElementById('CinemaPicturePreview');
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    output.src = e.target.result;
+                    document.getElementById('editForm').submit();
+                }
+
+                reader.readAsDataURL(newImage);
+            } else {
+                document.getElementById('editForm').submit();
+            }
+        }
+    </script>
+}
