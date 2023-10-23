@@ -12,8 +12,8 @@ using SimpleMVC.Data;
 namespace SimpleMVC.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20231022085501_Logo-Data-Field-To-Cinema")]
-    partial class LogoDataFieldToCinema
+    [Migration("20231023085743_Added-Picture-Data-To-Abstract-Person-Model")]
+    partial class AddedPictureDataToAbstractPersonModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,9 +42,8 @@ namespace SimpleMVC.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ProfilePictureURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PictureData")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
@@ -78,12 +77,7 @@ namespace SimpleMVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Logo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte[]>("LogoData")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
@@ -161,9 +155,8 @@ namespace SimpleMVC.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ProfilePictureURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PictureData")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 

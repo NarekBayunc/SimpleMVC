@@ -8,7 +8,7 @@
         <table class="table">
             <thead>
                 <tr class="text-center">
-                    <th>@Html.DisplayNameFor(model => model.ProfilePictureURL)</th>
+                    <th>@Html.DisplayNameFor(model => model.PictureData)</th>
                     <th>@Html.DisplayNameFor(model => model.FullName)</th>
                     <th>@Html.DisplayNameFor(model => model.Bio)</th>
                     <th>Actions</th>
@@ -19,8 +19,7 @@
                 {
                     <tr>
                         <td>
-                            <img class="rounded-circle" src="@item.ProfilePictureURL" alt="@item.FullName"
-                                 style="max-width: 150px">
+                            <img class="rounded-circle rounded-image-for-model" src="data:image/png;base64,@Convert.ToBase64String(item.PictureData!)" alt="@item.FullName">
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.FullName)

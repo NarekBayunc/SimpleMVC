@@ -95,7 +95,7 @@ namespace SimpleMVC.Data
             return imageData;
 
         }
-        public static byte[] DefaultImageForLogo()
+        public static byte[] DefaultImage()
         {
             string imagePath = "wwwroot/img/not-found.jpg";
             byte[] imageData;

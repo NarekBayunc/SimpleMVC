@@ -19,7 +19,7 @@
                         @{
                             var base64String = Model.LogoData != null ? Convert.ToBase64String(Model.LogoData) : string.Empty;
                         }
-                        <img class="border-info rounded-circle cinema-image" id="CinemaPicturePreview"
+                        <img class="border-info rounded-circle rounded-image-for-model" id="CinemaPicturePreview"
                              src="data:image/png;base64,@base64String" />
                     </div>
                     <div class="form-group mb-3">

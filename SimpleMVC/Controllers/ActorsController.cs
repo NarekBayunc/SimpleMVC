@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
@@ -22,17 +23,23 @@ namespace SimpleMVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("FullName, ProfilePictureURL, Bio")]Actor actor)
+        public async Task<IActionResult> Create([Bind("FullName, Bio, PictureData")]Actor actor,
+                                                            IFormFile? pictureData)
         {
-            if (!ModelState.IsValid)
+            if (pictureData == null && !(pictureData?.Length > 0))
             {
-                return View(actor);
+                actor.PictureData = Helper.DefaultImage();
             }
             else
+            {
+                actor.PictureData = Helper.FromImgToBytes(pictureData);
+            }
+            if (ModelState.IsValid)
             {
                 await service.AddAsync(actor);
                 return RedirectToAction(nameof(Index));
             }
+            return View(actor);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -49,8 +56,12 @@ namespace SimpleMVC.Controllers
             return View(actor);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Actor actor)
+        public async Task<IActionResult> Edit(Actor actor, 
+                                              IFormFile? pictureData,
+                                              string pictureDataString)
         {
+            byte[]? imageData = Helper.FromImgToBytes(pictureData, pictureDataString);
+            actor.PictureData = imageData;
             if (!ModelState.IsValid)
             {
                 return View(actor);

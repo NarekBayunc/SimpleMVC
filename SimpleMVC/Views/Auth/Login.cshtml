@@ -8,7 +8,7 @@
         <h1 style="text-align: center;">Log In</h1>
 
         <div class="row">
-            @Html.Partial("_ErrorMessage");
+            <partial name="_ErrorMessage" />
             @if (TempData.ContainsKey("LoggedOut")){
                 <div class="alert alert-info mx-auto" style="max-width: 300px;">
                     @TempData["LoggedOut"]

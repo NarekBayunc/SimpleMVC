@@ -39,13 +39,12 @@ namespace SimpleMVC.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ProfilePictureURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PictureData")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Actors", (string)null);
+                    b.ToTable("Actors");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.ActorMovie", b =>
@@ -60,7 +59,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("ActorsMovies", (string)null);
+                    b.ToTable("ActorsMovies");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.Cinema", b =>
@@ -75,12 +74,7 @@ namespace SimpleMVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Logo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte[]>("LogoData")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Name")
@@ -90,7 +84,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cinemas", (string)null);
+                    b.ToTable("Cinemas");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.Movie", b =>
@@ -138,7 +132,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasIndex("ProducerId");
 
-                    b.ToTable("Movies", (string)null);
+                    b.ToTable("Movies");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.Producer", b =>
@@ -158,13 +152,12 @@ namespace SimpleMVC.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("ProfilePictureURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PictureData")
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Producers", (string)null);
+                    b.ToTable("Producers");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.User", b =>
@@ -199,7 +192,7 @@ namespace SimpleMVC.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("SimpleMVC.Models.ActorMovie", b =>

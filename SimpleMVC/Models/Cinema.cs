@@ -16,7 +16,7 @@ namespace SimpleMVC.Models
         public string? Description { get; set; }
         [Display(Name = "Cinema Logo")]
         [AllowNull]
-        public byte[]? LogoData { get; set; } = Helper.DefaultImageForLogo();
+        public byte[]? LogoData { get; set; } = Helper.DefaultImage();
         public List<Movie>? Movies { get; set; }
 
     }

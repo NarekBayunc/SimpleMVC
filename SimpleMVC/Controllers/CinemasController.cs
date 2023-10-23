@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
@@ -29,7 +28,7 @@ namespace SimpleMVC.Controllers
         {
             if (logoData == null && !(logoData?.Length > 0))
             {
-                cinema.LogoData = Helper.DefaultImageForLogo();
+                cinema.LogoData = Helper.DefaultImage();
             }
             else
             {

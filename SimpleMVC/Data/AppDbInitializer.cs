@@ -73,32 +73,32 @@ namespace SimpleMVC.Data
                         {
                             FullName = "Actor 1",
                             Bio = "This is the Bio of the first actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-1.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-1.jpg")
 
                         },
                         new Actor()
                         {
                             FullName = "Actor 2",
                             Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-2.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-2.jpg")
                         },
                         new Actor()
                         {
                             FullName = "Actor 3",
                             Bio = "This is the Bio of the third actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-3.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-3.jpg")
                         },
                         new Actor()
                         {
                             FullName = "Actor 4",
                             Bio = "This is the Bio of the fourth actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-4.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-4.jpg")
                         },
                         new Actor()
                         {
                             FullName = "Actor 5",
                             Bio = "This is the Bio of the fifth actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/actors/actor-5.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-5.jpg")
                         }
                     });
                     await context.SaveChangesAsync();
@@ -111,32 +111,32 @@ namespace SimpleMVC.Data
                         {
                             FullName = "Producer 1",
                             Bio = "This is the Bio of the first actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-1.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-5.jpg")
 
                         },
                         new Producer()
                         {
                             FullName = "Producer 2",
                             Bio = "This is the Bio of the second actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-2.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-5.jpg")
                         },
                         new Producer()
                         {
                             FullName = "Producer 3",
                             Bio = "This is the Bio of the third actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-3.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-5.jpg")
                         },
                         new Producer()
                         {
                             FullName = "Producer 4",
                             Bio = "This is the Bio of the fourth actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-4.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-5.jpg")
                         },
                         new Producer()
                         {
                             FullName = "Producer 5",
                             Bio = "This is the Bio of the fifth actor",
-                            ProfilePictureURL = "http://dotnethow.net/images/producers/producer-5.jpeg"
+                            PictureData = Helper.FromImgToBytes("wwwroot/img/producer-5.jpg")
                         }
                     });
                     await context.SaveChangesAsync();

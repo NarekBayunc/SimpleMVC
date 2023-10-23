@@ -82,13 +82,13 @@
 
 <script>
     $(document).ready(function () {
-        var output = document.getElementById('ProfilePicturePreview');
-        output.src = $("#ProfilePictureURL").val();
+        var output = document.getElementById('PersonPicturePreview');
+        output.src = URL.createObjectURL(this.files[0]);
     })
 
-    $("#ProfilePictureURL").on("change", function () {
-        var output = document.getElementById('ProfilePicturePreview');
-        output.src = $(this).val();
+    $("#PictureData").on("change", function () {
+        var output = document.getElementById('PersonPicturePreview');
+        output.src = URL.createObjectURL(this.files[0]);
     })
 
     $(document).ready(function () {
