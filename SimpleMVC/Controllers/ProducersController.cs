@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data;
+using SimpleMVC.Data.Extensions;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
@@ -9,6 +10,7 @@ namespace SimpleMVC.Controllers
     [Authorize]
     public class ProducersController : Controller
     {
+        private readonly string _indexPage = "/Producers/Index";
         private readonly IEntityControllerService<Producer> service;
         public ProducersController(IEntityControllerService<Producer> service)
         {
@@ -44,14 +46,22 @@ namespace SimpleMVC.Controllers
         public async Task<IActionResult> Details(int id)
         {
             Producer? producer = await service.GetByIdAsync(id);
-            RedirectIfNull(producer);
+            RedirectResult? redirectResult = this.RedirectIfNull(producer, _indexPage);
+            if (redirectResult != null)
+            {
+                return redirectResult;
+            }
             return View(producer);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             Producer? producer = await service.GetByIdAsync(id);
-            RedirectIfNull(producer);
+            RedirectResult? redirectResult = this.RedirectIfNull(producer, _indexPage);
+            if (redirectResult != null)
+            {
+                return redirectResult;
+            }
             return View(producer);
         }
         [HttpPost]
@@ -75,27 +85,24 @@ namespace SimpleMVC.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             Producer? producer = await service.GetByIdAsync(id);
-            RedirectIfNull(producer);
+            RedirectResult? redirectResult = this.RedirectIfNull(producer, _indexPage);
+            if (redirectResult != null)
+            {
+                return redirectResult;
+            }
             return View(producer);
         }
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await RedirectIfNullAsync(id);
+            RedirectResult? redirectResult = await this.RedirectIfNullAsync(id, service.GetByIdAsync,
+                                                                            _indexPage);
+            if (redirectResult != null)
+            {
+                return redirectResult;
+            }
             await service.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        public RedirectResult RedirectIfNull(Producer? producer)
-        {
-            if (producer == null) return Redirect("/Producers/Index");
-            else return null!;
-        }
-        public async Task<RedirectResult> RedirectIfNullAsync(int id)
-        {
-            Producer? producer = await service.GetByIdAsync(id);
-            if (producer == null) return Redirect("/Producers/Index");
-            else return null!;
         }
     }
 }
