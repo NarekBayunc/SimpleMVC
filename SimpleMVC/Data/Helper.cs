@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using Microsoft.EntityFrameworkCore;
-using SimpleMVC.Data.Base;
-using SimpleMVC.Models;
-using System.Drawing;
 using System.Security.Cryptography;
+using Image = SixLabors.ImageSharp.Image;
 
 namespace SimpleMVC.Data
 {
@@ -25,7 +22,6 @@ namespace SimpleMVC.Data
 
             return $"{hashed}:{Convert.ToBase64String(salt)}";
         }
-
         public static bool VerifyPassword(string hashedPassword, string userInput)
         {
             string[] parts = hashedPassword.Split(':');
@@ -82,18 +78,22 @@ namespace SimpleMVC.Data
         public static byte[]? FromImgToBytes(string imageDataString)
         {
             byte[]? imageData = null!;
-          
+
             if (!string.IsNullOrEmpty(imageDataString))
             {
-                Image image = Image.FromFile(imageDataString);
-                using (MemoryStream ms = new MemoryStream())
+                using (FileStream fs = new FileStream(imageDataString, FileMode.Open))
                 {
-                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    return ms.ToArray();
+                    using (Image<Rgba32> image = Image.Load<Rgba32>(fs))
+                    {
+                        using (MemoryStream ms = new MemoryStream())
+                        {
+                            image.SaveAsJpeg(ms);
+                            return ms.ToArray();
+                        }
+                    }
                 }
             }
             return imageData;
-
         }
         public static byte[] DefaultImage()
         {
