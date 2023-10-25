@@ -21,9 +21,9 @@ namespace SimpleMVC.Data.Extensions
                                                       int id, Func<int, Task<T?>> getByIdAsync,
                                                       string redirectUrl)
         {
-            T? producer = await getByIdAsync(id);
+            T? entity = await getByIdAsync(id);
 
-            if (producer == null)
+            if (entity == null)
             {
                 return new RedirectResult(redirectUrl);
             }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SimpleMVC.Controllers
 {
@@ -31,7 +30,7 @@ namespace SimpleMVC.Controllers
             Movie? data = (await movieService.GetInlcudedListAsync(m => m.Cinema!))
                             .FirstOrDefault(m => m.Id == id); 
          
-            if (data == null) return Redirect("/Movies/Index");
+            if (data == null) return Redirect(nameof(Index));
 
             MovieViewModel movieViewModel = new MovieViewModel()
             {   Movie = data ,
@@ -41,7 +40,7 @@ namespace SimpleMVC.Controllers
 
             if (movieViewModel == null)
             {
-                return Redirect("/Movies/Index");
+                return Redirect(nameof(Index));
             }
             else
             {
@@ -74,7 +73,7 @@ namespace SimpleMVC.Controllers
             data = (await movieService.GetInlcudedListAsync(p => p.Producer!)).
                                   FirstOrDefault(p => p.Id == id);
 
-            if (data == null) return Redirect("/Movies/Index");
+            if (data == null) return Redirect(nameof(Index));
             else
             {
                 return View(data);
@@ -83,7 +82,11 @@ namespace SimpleMVC.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             Movie? movie = await movieService.GetByIdAsync(id);
-            await movieService.RemoveAsync(id);
+            if (movie != null)
+            {
+                await movieService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
             return RedirectToAction(nameof(Index));
 
         }
@@ -96,6 +99,16 @@ namespace SimpleMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(Movie movie, IFormFile? moviePictureData)
         {
+            if (await ProcessMovieCreation(movie, moviePictureData))
+            {
+                return RedirectToAction("Index", "Movies", ViewData["IsMovieAdded"] = "True");
+            }
+            return View(movie);
+        }
+
+        private async Task<bool> ProcessMovieCreation(Movie movie, IFormFile? moviePictureData)
+        {
+
             await SetViewBagForMovieAdd();
             if (moviePictureData == null && !(moviePictureData?.Length > 0))
             {
@@ -105,14 +118,16 @@ namespace SimpleMVC.Controllers
             {
                 movie.PictureData = Helper.FromImgToBytes(moviePictureData);
             }
+
             if (ModelState.IsValid)
             {
                 movie.Producer = await producerService.GetByIdAsync(movie.ProducerId);
                 movie.Cinema = await cinemaService.GetByIdAsync(movie.CinemaId);
                 await movieService.AddAsync(movie);
-                return RedirectToAction("Index", "Movies", ViewData["IsMovieAdded"] = "True");
+                return true;
             }
-            return View(movie);
+
+            return false;
         }
         public async Task<IEnumerable<Producer>> GetProducersAsync()
         {
@@ -128,12 +143,4 @@ namespace SimpleMVC.Controllers
             ViewBag.Cinemas = await GetCinemasAsync();
         }
     }
-
-    public class MovieViewModel
-    {
-        public required Movie Movie { get; set; }
-        public required IEnumerable<Producer> Producers { get; set; }
-        public required IEnumerable<Cinema> Cinemas { get; set; }
-    }
-    
 }

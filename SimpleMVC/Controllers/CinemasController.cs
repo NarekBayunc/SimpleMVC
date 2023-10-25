@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data;
+using SimpleMVC.Data.CustomAttributes;
+using SimpleMVC.Data.Extensions;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
@@ -9,6 +11,7 @@ namespace SimpleMVC.Controllers
     [Authorize]
     public class CinemasController : Controller
     {
+        private const string _indexPage = "/Cinemas/Index";
         private readonly IEntityControllerService<Cinema> service;
         public CinemasController(IEntityControllerService<Cinema> service)
         {
@@ -41,18 +44,24 @@ namespace SimpleMVC.Controllers
             }
             return View(cinema);
         }
-
+        [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> Details(int id)
         {
             Cinema? cinema = await service.GetByIdAsync(id);
-            RedirectIfNull(cinema);
+            if (cinema == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return View(cinema);
         }
-
+        [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> Edit(int id)
         {
             Cinema? cinema = await service.GetByIdAsync(id);
-            RedirectIfNull(cinema);
+            if (cinema == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return View(cinema);
         }
         [HttpPost]
@@ -72,31 +81,23 @@ namespace SimpleMVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
+        [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> Delete(int id)
         {
             Cinema? cinema = await service.GetByIdAsync(id);
-            RedirectIfNull(cinema);
+            if (cinema == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return View(cinema);
         }
         [HttpPost]
+        [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await RedirectIfNullAsync(id);
             await service.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        public RedirectResult RedirectIfNull(Cinema? cinema)
-        {
-            if (cinema == null) return Redirect("/Cinemas/Index");
-            else return null!;
-        }
-        public async Task<RedirectResult> RedirectIfNullAsync(int id)
-        {
-            Cinema? cinema = await service.GetByIdAsync(id);
-            if (cinema == null) return Redirect("/Cinemas/Index");
-            else return null!;
-        }
     }
 }

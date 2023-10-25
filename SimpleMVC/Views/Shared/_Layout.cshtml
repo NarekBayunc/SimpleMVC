@@ -86,33 +86,16 @@
 
 <script>
     $(document).ready(function () {
-        var output = document.getElementById('PersonPicturePreview');
-        output.src = URL.createObjectURL(this.files[0]);
-    })
+        previewImage('PersonPicturePreview', 'PictureData');
+        previewImage('CinemaPicturePreview', 'Logo');
+        previewImage('MoviePicturePreview', 'MoviePictureData');
+    });
 
-    $("#PictureData").on("change", function () {
-        var output = document.getElementById('PersonPicturePreview');
-        output.src = URL.createObjectURL(this.files[0]);
-    })
-
-    $(document).ready(function () {
-        var output = document.getElementById('CinemaPicturePreview');
-        output.src = URL.createObjectURL(this.files[0]);
-    })
-
-    $("#Logo").on("change", function () {
-        var output = document.getElementById('CinemaPicturePreview');
-        output.src = URL.createObjectURL(this.files[0]);
-    })
-
-    $(document).ready(function () {
-        var output = document.getElementById('MoviePicturePreview');
-        output.src = URL.createObjectURL(this.files[0]);
-    })
-
-    $("#MoviePictureData").on("change", function () {
-        var output = document.getElementById('MoviePicturePreview');
-        output.src = URL.createObjectURL(this.files[0]);
-    })
+    function pageImagesHandler(outputId, inputId) {
+        var output = document.getElementById(outputId);
+        $("#" + inputId).on("change", function () {
+            output.src = URL.createObjectURL(this.files[0]);
+        });
+    }
 </script>
 

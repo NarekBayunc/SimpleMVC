@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data;
+using SimpleMVC.Data.CustomAttributes;
+using SimpleMVC.Data.Extensions;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
@@ -9,6 +11,7 @@ namespace SimpleMVC.Controllers
     [Authorize]
     public class ActorsController : Controller
     {
+        private const string _indexPage = "/Actors/Index";
         private readonly IEntityControllerService<Actor> service;
         public ActorsController(IEntityControllerService<Actor> service)
         {
@@ -41,18 +44,25 @@ namespace SimpleMVC.Controllers
             }
             return View(actor);
         }
-
+        [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> Details(int id)
         {
             Actor? actor = await service.GetByIdAsync(id);
-            RedirectIfNull(actor);
+            if (actor == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return View(actor);
         }
 
+        [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> Edit(int id)
         {
             Actor? actor = await service.GetByIdAsync(id);
-            RedirectIfNull(actor);
+            if (actor == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return View(actor);
         }
         [HttpPost]
@@ -73,30 +83,22 @@ namespace SimpleMVC.Controllers
             }
         }
 
+        [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> Delete(int id)
         {
             Actor? actor = await service.GetByIdAsync(id);
-            RedirectIfNull(actor);
+            if (actor == null)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             return View(actor);
         }
         [HttpPost]
+        [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await RedirectIfNullAsync(id);
             await service.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
-        }
-
-        public RedirectResult RedirectIfNull(Actor? actor)
-        {
-            if (actor == null) return Redirect("/Actors/Index");
-            else return null!;
-        }
-        public async Task<RedirectResult> RedirectIfNullAsync(int id)
-        {
-            Actor? actor = await service.GetByIdAsync(id);
-            if (actor == null) return Redirect("/Actors/Index");
-            else return null!;
         }
     }
 }
