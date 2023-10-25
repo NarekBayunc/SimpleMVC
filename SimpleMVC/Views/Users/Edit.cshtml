@@ -8,10 +8,19 @@
         <h1 style="text-align: center;">@Model.Name 's Profile</h1>
 
         <div class="row">
-            @Html.Partial("_ErrorMessage")
+            <partial name="_ErrorMessage" />
             <div class="col-md-8 offset-2">
-                <form asp-action="Edit">
+                <form asp-action="Edit" enctype="multipart/form-data" id="editForm">
                     <div asp-validation-summary="ModelOnly" class="text-danger">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="Role"/>
+                    </div>
+                    <div class="form-group text-center">
+                        @{
+                            var base64String = Model.PictureData != null ? Convert.ToBase64String(Model.PictureData) : string.Empty;
+                        }
+                        <img class="border-info rounded-circle rounded-image-for-model" id="PersonPicturePreview"
+                             src="data:image/png;base64,@base64String" />
                     </div>
                     <div class="form-group mb-3">
                         <label asp-for="Name" class="control-label"></label>
@@ -33,13 +42,18 @@
                         <input asp-for="Email" class="form-control input-field" />
                         <span asp-validation-for="Email" class="text-danger input-span"></span>
                     </div>
+                    <div class="form-group mb-3 custom-file">
+                        <label asp-for="PictureData" class="custom-file-label me-2">Select Your Picture</label>
+                        <input asp-for="PictureData" type="file" class="custom-file-input" id="PictureData">
+                    </div>
                     <div class="d-flex justify-content-between">
                         <div class="form-group">
-                            <a asp-controller="Movies" asp-action="Index" class="btn btn-outline-secondary float-start" >Back</a>
+                            <a asp-controller="Movies" asp-action="Index" class="btn btn-outline-secondary float-start">Back</a>
                         </div>
                         <div class="form-group d-flex justify-content-end">
-                            <a asp-controller="Users" asp-action="Index" class="btn btn-outline-danger mx-2">Cancel</a> 
-                            <input type="submit" value="Confirm" class="btn btn-outline-success" />
+                            <a asp-controller="Users" asp-action="Index" class="btn btn-outline-danger mx-2">Cancel</a>
+                            <input type="button" id="updateButton" value="Update" class="btn btn-outline-success float-end" disabled onclick="updateForm()" />
+                            <input type="hidden" name="pictureDataString" value="@Convert.ToBase64String(Model.PictureData!)" />
                         </div>
                     </div>
                 </form>
@@ -49,4 +63,33 @@
     </div>
 </div>
 
- 
+@section Scripts {
+    <script>
+        var formChanged = false;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            var inputs = document.querySelectorAll("input, select, textarea");
+
+            inputs.forEach(function (input) {
+                input.addEventListener("change", function () {
+                    formChanged = true;
+                    document.getElementById("updateButton").disabled = !formChanged;
+                });
+            });
+        });
+        function updateForm() {
+            var newImage = document.getElementById('PictureData').files[0];
+            if (newImage) {
+                var output = document.getElementById('PersonPicturePreview');
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    output.src = e.target.result;
+                    document.getElementById('editForm').submit();
+                }
+                reader.readAsDataURL(newImage);
+            } else {
+                document.getElementById('editForm').submit();
+            }
+        }
+    </script>
+}

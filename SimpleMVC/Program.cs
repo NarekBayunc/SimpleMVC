@@ -6,7 +6,6 @@ using SimpleMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 GetServices();
-
 var app = builder.Build();
 
 await AppDbInitializer.Seed(app);

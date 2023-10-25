@@ -43,6 +43,7 @@ namespace SimpleMVC.Data.Services
             userFromDb.Name = user.Name;
             userFromDb.Age = user.Age;
             userFromDb.Email = user.Email;
+            userFromDb.PictureData = user.PictureData;
             if (user != null)
             {
                 context.Users.Update(userFromDb);

@@ -1,6 +1,8 @@
-﻿using SimpleMVC.Data.Base;
+﻿using SimpleMVC.Data;
+using SimpleMVC.Data.Base;
 using SimpleMVC.Data.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SimpleMVC.Models
 {
@@ -25,6 +27,9 @@ namespace SimpleMVC.Models
         [MinLength(3, ErrorMessage = "Password must have at least 3 characters")]
         public string? Password { get; set; }
         [Required]
-        public UserRole Role { get; set; } = UserRole.Default;
+        public UserRole Role { get; set; }
+        [Display(Name = "Picture")]
+        [AllowNull]
+        public byte[]? PictureData { get; set; } = Helper.DefaultImage();
     }
 }

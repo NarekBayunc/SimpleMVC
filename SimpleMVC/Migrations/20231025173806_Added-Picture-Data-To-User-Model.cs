@@ -5,18 +5,14 @@
 namespace SimpleMVC.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedPictureDataForMovies : Migration
+    public partial class AddedPictureDataToUserModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "ImageUrl",
-                table: "Movies");
-
             migrationBuilder.AddColumn<byte[]>(
                 name: "PictureData",
-                table: "Movies",
+                table: "Users",
                 type: "varbinary(max)",
                 nullable: true);
         }
@@ -26,14 +22,7 @@ namespace SimpleMVC.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "PictureData",
-                table: "Movies");
-
-            migrationBuilder.AddColumn<string>(
-                name: "ImageUrl",
-                table: "Movies",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+                table: "Users");
         }
     }
 }

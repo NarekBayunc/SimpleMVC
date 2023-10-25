@@ -24,6 +24,15 @@ namespace SimpleMVC.Data
                             Login = "123",
                             Password = Helper.HashPassword("123"),
                             Role = UserRole.Default,
+                        },
+                        new User()
+                        {
+                            Name = "321",
+                            Email = "321@gmail.com",
+                            Age = 18,
+                            Login = "321",
+                            Password = Helper.HashPassword("321"),
+                            Role = UserRole.Admin,
                         }
                     });
                     await context.SaveChangesAsync();

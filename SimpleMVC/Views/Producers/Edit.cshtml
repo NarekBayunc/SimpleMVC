@@ -16,13 +16,11 @@
                         <input type="hidden" asp-for="Id" />
                     </div>
                     <div class="form-group text-center">
-                        <div class="form-group text-center">
-                            @{
-                                var base64String = Model.PictureData != null ? Convert.ToBase64String(Model.PictureData) : string.Empty;
-                            }
-                            <img class="border-info rounded-circle rounded-image-for-model" id="PersonPicturePreview"
-                                 src="data:image/png;base64,@base64String" />
-                        </div>
+                        @{
+                            var base64String = Model.PictureData != null ? Convert.ToBase64String(Model.PictureData) : string.Empty;
+                        }
+                        <img class="border-info rounded-circle rounded-image-for-model" id="ActorPicturePreview"
+                                src="data:image/png;base64,@base64String" />
                     </div>
                     <div class="form-group mb-3">
                         <label asp-for="FullName" class="control-label"></label>
@@ -55,7 +53,7 @@
         function updateForm() {
             var newImage = document.getElementById('PictureData').files[0];
             if (newImage) {
-                var output = document.getElementById('PersonPicturePreview');
+                var output = document.getElementById('ActorPicturePreview');
                 var reader = new FileReader();
 
                 reader.onload = function (e) {

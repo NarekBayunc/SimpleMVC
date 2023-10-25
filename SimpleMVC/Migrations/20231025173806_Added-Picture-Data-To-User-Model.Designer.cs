@@ -12,8 +12,8 @@ using SimpleMVC.Data;
 namespace SimpleMVC.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20231025150455_AddedPictureDataForMovies")]
-    partial class AddedPictureDataForMovies
+    [Migration("20231025173806_Added-Picture-Data-To-User-Model")]
+    partial class AddedPictureDataToUserModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -188,6 +188,9 @@ namespace SimpleMVC.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("PictureData")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("Role")
                         .HasColumnType("int");

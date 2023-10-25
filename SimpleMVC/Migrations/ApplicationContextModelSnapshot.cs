@@ -186,6 +186,9 @@ namespace SimpleMVC.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("PictureData")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
 

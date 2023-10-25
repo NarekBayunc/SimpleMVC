@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
+using System.Security.Claims;
 
 namespace SimpleMVC.Controllers
 {
@@ -12,17 +13,26 @@ namespace SimpleMVC.Controllers
         private readonly IEntityControllerService<Movie> movieService;
         private readonly IEntityControllerService<Producer> producerService;
         private readonly IEntityControllerService<Cinema> cinemaService;
+        private readonly UserService service;
         public MoviesController(IEntityControllerService<Movie> mov, 
             IEntityControllerService<Producer> prod,
-            IEntityControllerService<Cinema> cin)
+            IEntityControllerService<Cinema> cin,
+            UserService service)
         {
             movieService = mov;
             producerService = prod;
             cinemaService = cin;
+            this.service = service;
         }
         public async Task<IActionResult> Index()
         {
             var data = await movieService.GetInlcudedListAsync(m => m.Cinema!);
+            string? userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (userEmail != null)
+            {
+                User? user = await service.GetByEmailAsync(userEmail);
+                ViewBag.PictureData = user.PictureData;
+            }
             return View(data);
         }
         [Authorize(Roles = "Admin")]

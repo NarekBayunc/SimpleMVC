@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 using System.Security.Claims;
+using SimpleMVC.Data;
+using SimpleMVC.Data.Enums;
 
 namespace SimpleMVC.Controllers
 {
@@ -19,11 +21,12 @@ namespace SimpleMVC.Controllers
         public async Task<IActionResult> Index()
         {
             string? userEmail = User.FindFirstValue(ClaimTypes.Email);
-            if (userEmail != null) 
+            if (userEmail != null)
             {
                 User? user = await service.GetByEmailAsync(userEmail);
                 return View(user);
             }
+         
             return View();
         }
         public async Task<IActionResult> Edit(int id)
@@ -36,9 +39,12 @@ namespace SimpleMVC.Controllers
             return RedirectToAction(nameof(Index));
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(User user)
+        public async Task<IActionResult> Edit(User user, IFormFile? pictureData,
+                                              string pictureDataString)
         {
             ModelState.Remove("Password");
+            byte[]? imageData = Helper.FromImgToBytes(pictureData, pictureDataString);
+            user.PictureData = imageData;
             if (!ModelState.IsValid || user == null)
             {
                 TempData["ErrorMessage"] = "Invalid data input, please try again";
@@ -54,7 +60,7 @@ namespace SimpleMVC.Controllers
                 }
                 return View(user);
             }
-            
+
         }
 
         public async Task RefreshSignInAsync(User user)
@@ -64,6 +70,7 @@ namespace SimpleMVC.Controllers
             {
                 new Claim(ClaimTypes.Name, user.Login!),
                 new Claim(ClaimTypes.Email, user.Email!),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, authScheme);

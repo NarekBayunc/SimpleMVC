@@ -28,10 +28,10 @@ namespace SimpleMVC.Controllers
         public IActionResult Login()
         {
             ClaimsPrincipal claimUser = HttpContext.User;
-
             if (claimUser.Identity != null && claimUser.Identity.IsAuthenticated)
             {
-                return Redirect("/Movies/Index");
+                string? userEmail = User.FindFirstValue(ClaimTypes.Email);
+                return RedirectToAction("Index", "Movies");
             }
 
             return View();
