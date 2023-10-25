@@ -13,16 +13,12 @@
         <h1 style="text-align: center; margin-bottom: 20px;">Adding a Movie</h1>
         <div class="row">
             <div class="col-md-8 offset-2">
-                <form asp-action="Create">
+                <form asp-action="Create" enctype="multipart/form-data" id="editForm">
                     <div asp-validation-summary="ModelOnly" class="text-danger">
                     </div>
                     <div class="form-group text-center">
-                        <img class="border-info rounded-3" style="max-width: 250px" id="MovieImage" />
-                    </div>
-                    <div class="form-group mb-3">
-                        <label asp-for="ImageUrl" class="control-label"></label>
-                        <input asp-for="ImageUrl" id="ImageUrl" class="form-control" />
-                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                        <img class="border-info rounded-3 movie-image-rounded" id="MoviePicturePreview"
+                             src="~/img/not-found.jpg" />
                     </div>
                     <div class="form-group mb-3">
                         <label asp-for="Name" class="control-label"></label>
@@ -81,6 +77,10 @@
                                 <option value="@category">@category</option>
                             }
                         </select>
+                    </div>
+                    <div class="form-group mb-3 custom-file">
+                        <label asp-for="PictureData" class="custom-file-label me-2">Select image for Movie</label>
+                        <input asp-for="PictureData" type="file" class="custom-file-input" id="MoviePictureData">
                     </div>
                     <div class="form-group">
                         <input type="submit" value="Add" class="btn btn-outline-success float-end" />

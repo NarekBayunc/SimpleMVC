@@ -23,8 +23,14 @@ body {
 
 .MovieImage {
     width: 100%;
+    max-height: 330px;
+}
+
+.movie-image-rounded {
+    max-width: 250px;
 }
 .rounded-image-for-model {
     width: 150px;
     height: 150px;
 }
+

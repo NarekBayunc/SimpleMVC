@@ -5,7 +5,7 @@ using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// TODO CINEMAS REDIRECT IF NULl
 GetServices();
 
 var app = builder.Build();

@@ -1,7 +1,9 @@
-﻿using SimpleMVC.Data.Base;
+﻿using SimpleMVC.Data;
+using SimpleMVC.Data.Base;
 using SimpleMVC.Data.Enums;
 using SimpleMVC.Data.ValidationAttributes;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SimpleMVC.Models
 {
@@ -19,9 +21,9 @@ namespace SimpleMVC.Models
         [Required(ErrorMessage = "Price is required")]
         [Range(1, 150, ErrorMessage = "Price can be between 1 and 150")]
         public double Price { get; set; }
-        [Display(Name = "Movie Picture ")]
-        [Required(ErrorMessage = "Movie Picture is required")]
-        public string? ImageUrl { get; set; }
+        [Display(Name = "Picture")]
+        [AllowNull]
+        public byte[]? PictureData { get; set; } = Helper.DefaultImage();
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Start Date")]
         [Required(ErrorMessage = "Start Date is required")]

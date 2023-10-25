@@ -31,10 +31,14 @@
                             </div>
                         </li>
                     </ul>
+                    @if (ViewContext.RouteData.Values["controller"]!.ToString() == "Movies"
+                                     && ViewContext.RouteData.Values["action"]!.ToString() == "Index")
+                    {
                     <form class="form-inline my-2 my-lg-0 mx-5 d-flex" asp-controller="Movies" asp-action="Filter" style="padding-right: 25px;">
                         <input name="searchString" type="text" class="form-control mx-1" placeholder="Search for a movie..." aria-label="Recipient's username" aria-describedby="button-addon2">
                         <button class="btn btn-outline-success my-2 my-sm-0 mx-1" asp-action="Index" type="submit"><i class="bi bi-search"></i></button>
                     </form>
+                    }
                     @if (User.Identity!.IsAuthenticated)
                     {
                         <a asp-controller="Users" asp-action="Index" class="mx-2">
@@ -102,13 +106,13 @@
     })
 
     $(document).ready(function () {
-        var output = document.getElementById('MovieImage');
-        output.src = $("#ImageUrl").val();
+        var output = document.getElementById('MoviePicturePreview');
+        output.src = URL.createObjectURL(this.files[0]);
     })
 
-    $("#ImageUrl").on("change", function () {
-        var output = document.getElementById('MovieImage');
-        output.src = $(this).val();
+    $("#MoviePictureData").on("change", function () {
+        var output = document.getElementById('MoviePicturePreview');
+        output.src = URL.createObjectURL(this.files[0]);
     })
 </script>
 

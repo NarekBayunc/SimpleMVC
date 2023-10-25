@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -27,7 +28,8 @@ namespace SimpleMVC.Controllers
         }
         public async Task<IActionResult> Edit(int id)
         {
-            Movie? data = (await movieService.GetInlcudedListAsync(m => m.Cinema!)).FirstOrDefault(m => m.Id == id); 
+            Movie? data = (await movieService.GetInlcudedListAsync(m => m.Cinema!))
+                            .FirstOrDefault(m => m.Id == id); 
          
             if (data == null) return Redirect("/Movies/Index");
 
@@ -47,8 +49,11 @@ namespace SimpleMVC.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Movie movie)
+        public async Task<IActionResult> Edit(Movie movie, IFormFile? moviePictureData,
+                                              string moviePictureDataString)
         {
+            byte[]? imageData = Helper.FromImgToBytes(moviePictureData, moviePictureDataString);
+            movie.PictureData = imageData;
             if (!ModelState.IsValid)
             {
                 return View(movie);
@@ -89,20 +94,25 @@ namespace SimpleMVC.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Movie movie)
+        public async Task<IActionResult> Create(Movie movie, IFormFile? moviePictureData)
         {
             await SetViewBagForMovieAdd();
-            if (!ModelState.IsValid)
+            if (moviePictureData == null && !(moviePictureData?.Length > 0))
             {
-                return View(movie);
+                movie.PictureData = Helper.DefaultImage();
             }
             else
+            {
+                movie.PictureData = Helper.FromImgToBytes(moviePictureData);
+            }
+            if (ModelState.IsValid)
             {
                 movie.Producer = await producerService.GetByIdAsync(movie.ProducerId);
                 movie.Cinema = await cinemaService.GetByIdAsync(movie.CinemaId);
                 await movieService.AddAsync(movie);
-                return RedirectToAction("Index","Movies", ViewData["IsMovieAdded"] = "True");
+                return RedirectToAction("Index", "Movies", ViewData["IsMovieAdded"] = "True");
             }
+            return View(movie);
         }
         public async Task<IEnumerable<Producer>> GetProducersAsync()
         {

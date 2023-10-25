@@ -27,7 +27,7 @@
     @foreach (var movie in Model)
     {
         <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
-            <div class="card mb-3">
+            <div class="card mb-3" >
                 <div class="row g-0">
                     <div class="col-md-12">
                         <div class="card-header text-white bg-info" id="card-header">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <img src="@movie.ImageUrl" class="img-fluid MovieImage" alt="@movie.Name">
+                        <img class="img-fluid MovieImage" src="data:image/png;base64,@Convert.ToBase64String(movie.PictureData!)" alt="@movie.Name">
                     </div>
                     <div class="col-md-6">
                         <div class="card-body">
