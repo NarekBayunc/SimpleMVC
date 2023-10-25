@@ -10,7 +10,6 @@ namespace SimpleMVC.Data.CustomAttributes
         {
             _redirectUrl = redirectUrl;
         }
-
         public override async Task OnActionExecutionAsync(ActionExecutingContext context,
                                                             ActionExecutionDelegate next)
         {
@@ -28,7 +27,6 @@ namespace SimpleMVC.Data.CustomAttributes
                     }
                 }
             }
-
             await next();
         }
     }

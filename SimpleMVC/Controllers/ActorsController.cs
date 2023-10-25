@@ -2,13 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data;
 using SimpleMVC.Data.CustomAttributes;
-using SimpleMVC.Data.Extensions;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
+using System.Security.Claims;
 
 namespace SimpleMVC.Controllers
 {
-    [Authorize]
     public class ActorsController : Controller
     {
         private const string _indexPage = "/Actors/Index";
@@ -21,11 +20,13 @@ namespace SimpleMVC.Controllers
         {
             return View(await service.GetAllAsync());
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("FullName, Bio, PictureData")]Actor actor,
                                                             IFormFile? pictureData)
         {
@@ -54,7 +55,7 @@ namespace SimpleMVC.Controllers
             }
             return View(actor);
         }
-
+        [Authorize(Roles = "Admin")]
         [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> Edit(int id)
         {
@@ -65,6 +66,7 @@ namespace SimpleMVC.Controllers
             }
             return View(actor);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(Actor actor, 
                                               IFormFile? pictureData,
@@ -82,7 +84,7 @@ namespace SimpleMVC.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
-
+        [Authorize(Roles = "Admin")]
         [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> Delete(int id)
         {
@@ -94,6 +96,7 @@ namespace SimpleMVC.Controllers
             return View(actor);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [RedirectIfNull(_indexPage)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

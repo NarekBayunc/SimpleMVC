@@ -80,7 +80,8 @@ namespace SimpleMVC.Controllers
             string authScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             List<Claim>? claims = new List<Claim>()
                             { new Claim(ClaimTypes.Name, user.Login!),
-                              new Claim(ClaimTypes.Email, user.Email!)
+                              new Claim(ClaimTypes.Email, user.Email!),
+                              new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
                             };
             ClaimsIdentity? identity = new ClaimsIdentity(claims, authScheme);
             AuthenticationProperties authProp = new AuthenticationProperties()

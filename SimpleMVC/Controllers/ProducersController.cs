@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SimpleMVC.Data;
 using SimpleMVC.Data.CustomAttributes;
-using SimpleMVC.Data.Extensions;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
@@ -21,11 +20,13 @@ namespace SimpleMVC.Controllers
         {
             return View(await service.GetAllAsync());
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("FullName, Bio, PictureData")] Producer producer,
                                                             IFormFile? pictureData)
         {
@@ -55,6 +56,7 @@ namespace SimpleMVC.Controllers
             return View(producer);
         }
         [RedirectIfNull(_indexPage)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             Producer? producer = await service.GetByIdAsync(id);
@@ -65,6 +67,7 @@ namespace SimpleMVC.Controllers
             return View(producer);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Producer producer, 
                                               IFormFile? pictureData,
                                               string pictureDataString)
@@ -82,6 +85,7 @@ namespace SimpleMVC.Controllers
             }
         }
         [RedirectIfNull(_indexPage)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             Producer? producer = await service.GetByIdAsync(id);
@@ -93,6 +97,7 @@ namespace SimpleMVC.Controllers
         }
         [HttpPost]
         [RedirectIfNull(_indexPage)]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await service.RemoveAsync(id);

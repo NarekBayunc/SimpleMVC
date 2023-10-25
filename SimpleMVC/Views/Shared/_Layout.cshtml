@@ -90,7 +90,9 @@
         previewImage('CinemaPicturePreview', 'Logo');
         previewImage('MoviePicturePreview', 'MoviePictureData');
     });
-
+    setTimeout(function () {
+        document.getElementById('successAlert').style.display = 'none';
+    }, 2000);
     function pageImagesHandler(outputId, inputId) {
         var output = document.getElementById(outputId);
         $("#" + inputId).on("change", function () {

@@ -8,19 +8,19 @@
 
     @if (TempData.ContainsKey("SignedIn"))
     {
-        <div id="successAlert" class="alert alert-success text-center" style="display:none;">
+        <div id="successAlert" class="alert alert-success text-center">
             Hello @TempData["SignedIn"], you have successfully created an account.
         </div>
     }
     @if (TempData.ContainsKey("LoggedIn"))
     {
-        <div id="successAlert" class="alert alert-success text-center" style="display:none;">
+        <div id="successAlert" class="alert alert-success text-center">
             Hello @TempData["LoggedIn"] , you are successfuly Logged In
         </div>
     }
     @if (TempData.ContainsKey("IsMovieAdded"))
     {
-        <div id="successAlert" class="alert alert-success text-center" style="display:none;">
+        <div id="successAlert" class="alert alert-success text-center">
             New movie are successfuly Added.
         </div>
     }
@@ -33,7 +33,10 @@
                         <div class="card-header text-white bg-info" id="card-header">
                             <h5 class="card-title">
                                 @movie.Name
+                                @if (User.IsInRole("Admin"))
+                                {
                                 <a class="text-white float-end" asp-action="Edit" asp-route-id="@movie.Id"><i class="bi bi-pencil-square"></i></a>
+                                }
                             </h5>
                         </div>
                     </div>
@@ -80,12 +83,10 @@
             </div>
         </div>
     }
+    @if (User.IsInRole("Admin"))
+    {
     <div>
         <a style="position: fixed; right: 25px; bottom: 70px;" asp-controller="Movies" asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"> Add New</i></a>
     </div>
+    }
 </div>
-
-@section Scripts {
-    <script>
-    </script>
-}

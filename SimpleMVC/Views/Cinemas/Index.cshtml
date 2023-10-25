@@ -29,9 +29,12 @@
                             @Html.DisplayFor(modelItem => item.Description)
                         </td>
                         <td>
+                            @if (User.IsInRole("Admin"))
+                            {
                             <a class="btn btn-outline-primary text-black" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i> Edit</a>
+                            <a class="btn btn-danger text-black" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Delete</a> 
+                            }
                             <a class="btn btn-outline-info text-black" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye"></i> Details</a>
-                            <a class="btn btn-danger text-black" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i> Delete</a>
                         </td>
                     </tr>
                 }
@@ -39,6 +42,9 @@
         </table>
     </div>
 </div>
+@if (User.IsInRole("Admin"))
+{
 <div style="position: fixed; right: 25px; bottom: 70px" class="text-white">
     <a asp-controller="Cinemas" asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"> Add New</i></a>
 </div>
+}

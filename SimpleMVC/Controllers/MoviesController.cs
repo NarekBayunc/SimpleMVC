@@ -25,6 +25,7 @@ namespace SimpleMVC.Controllers
             var data = await movieService.GetInlcudedListAsync(m => m.Cinema!);
             return View(data);
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             Movie? data = (await movieService.GetInlcudedListAsync(m => m.Cinema!))
@@ -48,6 +49,7 @@ namespace SimpleMVC.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Movie movie, IFormFile? moviePictureData,
                                               string moviePictureDataString)
         {
@@ -79,6 +81,7 @@ namespace SimpleMVC.Controllers
                 return View(data);
             }
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             Movie? movie = await movieService.GetByIdAsync(id);
@@ -90,13 +93,14 @@ namespace SimpleMVC.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             await SetViewBagForMovieAdd();
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(Movie movie, IFormFile? moviePictureData)
         {
             if (await ProcessMovieCreation(movie, moviePictureData))

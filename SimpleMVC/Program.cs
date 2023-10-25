@@ -5,7 +5,6 @@ using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-// TODO CINEMAS REDIRECT IF NULl
 GetServices();
 
 var app = builder.Build();
@@ -40,7 +39,7 @@ void GetServices()
                                         option =>
                                         {
                                             option.LoginPath = "/Auth/Login";
-                                            option.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                                            option.ExpireTimeSpan = TimeSpan.FromMinutes(10);
                                             option.AccessDeniedPath = "/Auth/Login";
                                         });
 }
