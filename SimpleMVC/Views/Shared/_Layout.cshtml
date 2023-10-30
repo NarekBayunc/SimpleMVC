@@ -31,13 +31,14 @@
                             </div>
                         </li>
                     </ul>
-                    @if (ViewContext.RouteData.Values["controller"]!.ToString() == "Movies"
-                                     && ViewContext.RouteData.Values["action"]!.ToString() == "Index")
+                    @if (ViewContext.RouteData.Values["controller"]!.ToString() == "Movies")
                     {
                     <form class="form-inline my-2 my-lg-0 mx-5 d-flex" asp-controller="Movies" asp-action="Filter" style="padding-right: 25px;">
                         <input name="searchString" type="text" class="form-control mx-1" placeholder="Search for a movie..." aria-label="Recipient's username" aria-describedby="button-addon2">
-                        <button class="btn btn-outline-success my-2 my-sm-0 mx-1" asp-action="Index" type="submit"><i class="bi bi-search"></i></button>
+                        <button class="btn btn-outline-success my-2 my-sm-0 mx-1" asp-action="Filter" type="submit"><i class="bi bi-search"></i></button>
                     </form>
+                        <div id="suggestions" class="position-absolute bg-white border p-2" style="display:none;"></div>
+
                     }
                     @if (User.Identity!.IsAuthenticated)
                     {
@@ -103,5 +104,6 @@
             output.src = URL.createObjectURL(this.files[0]);
         });
     }
+
 </script>
 

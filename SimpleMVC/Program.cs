@@ -7,6 +7,7 @@ using SimpleMVC.Models;
 var builder = WebApplication.CreateBuilder(args);
 GetServices();
 var app = builder.Build();
+// TODO BUG - USERS CAN EDIT ANY OTHER USERS PAGE THAT THEY WANT
 
 await AppDbInitializer.Seed(app);
 

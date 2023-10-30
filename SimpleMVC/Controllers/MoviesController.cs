@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
@@ -118,6 +119,19 @@ namespace SimpleMVC.Controllers
                 return RedirectToAction("Index", "Movies", ViewData["IsMovieAdded"] = "True");
             }
             return View(movie);
+        }
+        public async Task<IActionResult> Filter(string? searchString)
+        {
+            if (searchString != null)
+            {
+                var movies = await movieService.GetAllAsync(); 
+                var filteredMovies = movies.Where(m => m.Name.ToLower()
+                .Contains(searchString.ToLower()))
+                .ToList();
+
+                return View("Index", filteredMovies);
+            }
+            return RedirectToAction(nameof(Index));
         }
 
         private async Task<bool> ProcessMovieCreation(Movie movie, IFormFile? moviePictureData)
