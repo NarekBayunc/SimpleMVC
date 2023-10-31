@@ -32,11 +32,17 @@ namespace SimpleMVC.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             User? user = await service.GetByIdAsync(id);
-            if (user != null)
+            User? userAuthed = null;
+            string? userEmail = User.FindFirstValue(ClaimTypes.Email);
+            if (userEmail != null && user != null)
             {
-                return View(user);
+                userAuthed = await service.GetByEmailAsync(userEmail);
+                if(user?.Id == userAuthed?.Id)
+                {
+                    return View(user);
+                }
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index","Movies");
         }
         [HttpPost]
         public async Task<IActionResult> Edit(User user, IFormFile? pictureData,
@@ -65,23 +71,13 @@ namespace SimpleMVC.Controllers
 
         public async Task RefreshSignInAsync(User user)
         {
-            string authScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Login!),
-                new Claim(ClaimTypes.Email, user.Email!),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
-            };
+            string authScheme;
+            ClaimsIdentity? identity;
+            AuthenticationProperties authProp;
+            Helper.UserCookieConfig(user, out authScheme, out identity, out authProp);
 
-            var claimsIdentity = new ClaimsIdentity(claims, authScheme);
-
-            var authProperties = new AuthenticationProperties
-            {
-                AllowRefresh = true,
-                IsPersistent = false
-            };
-            await HttpContext.SignOutAsync("Cookies");
-            await HttpContext.SignInAsync("Cookies", new ClaimsPrincipal(claimsIdentity), authProperties);
+            await HttpContext.SignOutAsync(authScheme);
+            await HttpContext.SignInAsync(authScheme, new ClaimsPrincipal(identity!), authProp);
         }
     }
 }

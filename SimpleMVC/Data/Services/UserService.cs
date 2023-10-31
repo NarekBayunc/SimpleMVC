@@ -23,7 +23,6 @@ namespace SimpleMVC.Data.Services
         {
             User? targetUser = await context.Users.FirstOrDefaultAsync(u => u.Email == user.Email
                                                                         && u.Login == user.Login);
-
             if (targetUser?.Password == null ||
                 user.Password == null ||
                 !Helper.VerifyPassword(targetUser.Password, user.Password))

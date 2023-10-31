@@ -27,7 +27,7 @@ namespace SimpleMVC.Models
         [MinLength(3, ErrorMessage = "Password must have at least 3 characters")]
         public string? Password { get; set; }
         [Required]
-        public UserRole Role { get; set; }
+        public UserRole Role { get; set; } = UserRole.Default;
         [Display(Name = "Picture")]
         [AllowNull]
         public byte[]? PictureData { get; set; } = Helper.DefaultImage();

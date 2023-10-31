@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SimpleMVC.Data;
 using SimpleMVC.Data.CustomAttributes;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
@@ -30,7 +31,6 @@ namespace SimpleMVC.Controllers
             ClaimsPrincipal claimUser = HttpContext.User;
             if (claimUser.Identity != null && claimUser.Identity.IsAuthenticated)
             {
-                string? userEmail = User.FindFirstValue(ClaimTypes.Email);
                 return RedirectToAction("Index", "Movies");
             }
 
@@ -74,22 +74,14 @@ namespace SimpleMVC.Controllers
             }
             return RedirectToAction("Index", "Movies", TempData["SignedIn"] = user.Name);
         }
-
         public async Task LogInViaCookie(User user)
         {
-            string authScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            List<Claim>? claims = new List<Claim>()
-                            { new Claim(ClaimTypes.Name, user.Login!),
-                              new Claim(ClaimTypes.Email, user.Email!),
-                              new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
-                            };
-            ClaimsIdentity? identity = new ClaimsIdentity(claims, authScheme);
-            AuthenticationProperties authProp = new AuthenticationProperties()
-            {
-                AllowRefresh = true,
-                IsPersistent = true
-            };
-            await HttpContext.SignInAsync(authScheme, new ClaimsPrincipal(identity), authProp);
+            string authScheme;
+            ClaimsIdentity? identity;
+            AuthenticationProperties authProp;
+            Helper.UserCookieConfig(user, out authScheme, out identity, out authProp);
+
+            await HttpContext.SignInAsync(authScheme, new ClaimsPrincipal(identity!), authProp);
         }
 
 
