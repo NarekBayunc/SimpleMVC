@@ -56,12 +56,19 @@ namespace SimpleMVC.Controllers
                 TempData["ErrorMessage"] = "Invalid data input, please try again";
                 return View(user);
             }
+            else if (user.Email != User.FindFirstValue(ClaimTypes.Email) && !service.IsValidMail(user))
+            {
+                TempData["ErrorMessage"] = "This Email Already Exists, try another";
+                return View(user);
+            }
             else
             {
                 bool updateResult = await service.UpdateAsync(user.Id, user);
                 if (updateResult)
                 {
-                    await RefreshSignInAsync(user);
+                    User? updatedUser = await service.GetByIdAsync(user.Id);
+                    await RefreshSignInAsync(updatedUser);
+                    TempData["ProfileEdited"] = "Your data has been successfully changed";
                     return RedirectToAction("Index", "Movies");
                 }
                 return View(user);

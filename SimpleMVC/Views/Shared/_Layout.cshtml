@@ -89,9 +89,10 @@
 
 <script>
     $(document).ready(function () {
-        previewImage('ActorPicturePreview', 'PictureData');
-        previewImage('CinemaPicturePreview', 'Logo');
-        previewImage('MoviePicturePreview', 'MoviePictureData');
+        pageImagesHandler('ActorPicturePreview', 'ActorPictureData');
+        pageImagesHandler('CinemaPicturePreview', 'Logo');
+        pageImagesHandler('MoviePicturePreview', 'MoviePictureData');
+        pageImagesHandler('UserPicturePreview', 'UserPictureData');
     });
 
     setTimeout(function () {

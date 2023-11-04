@@ -67,6 +67,10 @@ namespace SimpleMVC.Controllers
                 TempData["ErrorMessage"] = "Invalid data input, please try again";
                 return View(user);
             }
+            else if (!service.IsValidMail(user)) {
+                TempData["ErrorMessage"] = "This Email Already Exists, try another";
+                return View(user);
+            }
             else
             {
                 await service.AddAsync(user);

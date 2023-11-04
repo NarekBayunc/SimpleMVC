@@ -49,7 +49,7 @@
 
                         <div class="form-group mb-3">
                             <label asp-for="Movie.Producer"></label>
-                            <select asp-for="Movie.ProducerId" class="form-control">
+                        <select asp-for="Movie.ProducerId" class="form-control form-select">
                                 @foreach (var producer in Model.Producers)
                                 {
                                     <option value="@producer.Id">@producer.FullName</option>
@@ -59,7 +59,7 @@
 
                         <div class="form-group mb-3">
                             <label asp-for="Movie.Cinema"></label>
-                            <select asp-for="Movie.CinemaId" class="form-control">
+                        <select asp-for="Movie.CinemaId" class="form-control form-select">
                                 @foreach (var cinema in Model.Cinemas)
                                 {
                                     <option value="@cinema.Id">@cinema.Name</option>
@@ -69,7 +69,7 @@
 
                         <div class="form-group mb-3">
                             <label asp-for="Movie.MovieCategory"></label>
-                            <select asp-for="Movie.MovieCategory" class="form-control">
+                        <select asp-for="Movie.MovieCategory" class="form-control form-select">
                                 @foreach (var category in Enum.GetValues(typeof(MovieCategory)))
                                 {
                                     <option value="@category">@category</option>

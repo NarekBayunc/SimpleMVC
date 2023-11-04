@@ -58,5 +58,11 @@ namespace SimpleMVC.Data.Services
         {
             return await context.Users.FirstOrDefaultAsync(a => a.Email == email);
         }
+
+        public bool IsValidMail(User user)
+        {
+            bool result = context.Users.Where(u => u.Email == user.Email).Any();
+            return !result;
+        }
     }
 }

@@ -1,0 +1,24 @@
+﻿@if (TempData.ContainsKey("SignedIn"))
+{
+    <div id="successAlert" class="alert alert-success text-center">
+        Hello @TempData["SignedIn"], you have successfully created an account.
+    </div>
+}
+@if (TempData.ContainsKey("LoggedIn"))
+{
+    <div id="successAlert" class="alert alert-success text-center">
+        Hello @TempData["LoggedIn"] , you are successfully Logged In
+    </div>
+}
+@if (TempData.ContainsKey("IsMovieAdded"))
+{
+    <div id="successAlert" class="alert alert-success text-center">
+        New movie are successfuly Added.
+    </div>
+}
+@if (TempData.ContainsKey("ProfileEdited"))
+{
+    <div id="successAlert" class="alert alert-success text-center">
+        @TempData["ProfileEdited"]
+    </div>
+}
