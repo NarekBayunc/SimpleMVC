@@ -1,20 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using SimpleMVC.Data;
 using SimpleMVC.Data.CustomAttributes;
+using SimpleMVC.Data.Extensions;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
-using System.Security.Claims;
 
 namespace SimpleMVC.Controllers
 {
     public class ActorsController : Controller
     {
-        private const string _indexPage = "/Actors/Index";
+        private const string indexPage = "/Actors/Index";
         private readonly IEntityControllerService<Actor> service;
-        public ActorsController(IEntityControllerService<Actor> service)
+        private IMemoryCache cache;
+        private readonly MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
+                                                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
+        public ActorsController(IEntityControllerService<Actor> service, IMemoryCache cache)
         {
             this.service = service;
+            this.cache = cache;
         }
         public async Task<IActionResult> Index()
         {
@@ -40,15 +45,16 @@ namespace SimpleMVC.Controllers
             }
             if (ModelState.IsValid)
             {
-                await service.AddAsync(actor);
+                int actorId = await service.AddAsync(actor);
+                cache.Set(actorId, actor, cacheOptions);
                 return RedirectToAction(nameof(Index));
             }
             return View(actor);
         }
-        [RedirectIfNull(_indexPage)]
+        [RedirectIfNull(indexPage)]
         public async Task<IActionResult> Details(int id)
         {
-            Actor? actor = await service.GetByIdAsync(id);
+            Actor? actor = await this.GetObjectFromDbOrCache(id, service.GetByIdAsync, cache);
             if (actor == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -56,10 +62,10 @@ namespace SimpleMVC.Controllers
             return View(actor);
         }
         [Authorize(Roles = "Admin")]
-        [RedirectIfNull(_indexPage)]
+        [RedirectIfNull(indexPage)]
         public async Task<IActionResult> Edit(int id)
         {
-            Actor? actor = await service.GetByIdAsync(id);
+            Actor? actor = await this.GetObjectFromDbOrCache(id, service.GetByIdAsync, cache);
             if (actor == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -81,14 +87,16 @@ namespace SimpleMVC.Controllers
             else
             {
                 await service.UpdateAsync(actor);
+                cache.Remove(actor);
+                cache.Set(actor.Id, actor, cacheOptions);
                 return RedirectToAction(nameof(Index));
             }
         }
         [Authorize(Roles = "Admin")]
-        [RedirectIfNull(_indexPage)]
+        [RedirectIfNull(indexPage)]
         public async Task<IActionResult> Delete(int id)
         {
-            Actor? actor = await service.GetByIdAsync(id);
+            Actor? actor = await this.GetObjectFromDbOrCache(id, service.GetByIdAsync, cache);
             if (actor == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -97,9 +105,10 @@ namespace SimpleMVC.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        [RedirectIfNull(_indexPage)]
+        [RedirectIfNull(indexPage)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            cache.Remove(id);
             await service.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }

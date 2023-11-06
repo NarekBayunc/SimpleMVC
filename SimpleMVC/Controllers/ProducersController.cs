@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using SimpleMVC.Data;
 using SimpleMVC.Data.CustomAttributes;
+using SimpleMVC.Data.Extensions;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 
@@ -10,11 +12,15 @@ namespace SimpleMVC.Controllers
     [Authorize]
     public class ProducersController : Controller
     {
-        private const string _indexPage = "/Producers/Index";
+        private const string indexPage = "/Producers/Index";
         private readonly IEntityControllerService<Producer> service;
-        public ProducersController(IEntityControllerService<Producer> service)
+        private IMemoryCache cache;
+        private readonly MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
+                                                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
+        public ProducersController(IEntityControllerService<Producer> service, IMemoryCache cache)
         {
             this.service = service;
+            this.cache = cache;
         }
         public async Task<IActionResult> Index()
         {
@@ -40,26 +46,27 @@ namespace SimpleMVC.Controllers
             }
             if (ModelState.IsValid)
             {
-                await service.AddAsync(producer);
+                int producerId = await service.AddAsync(producer);
+                cache.Set(producerId, producer, cacheOptions);
                 return RedirectToAction(nameof(Index));
             }
             return View(producer);
         }
-        [RedirectIfNull(_indexPage)]
+        [RedirectIfNull(indexPage)]
         public async Task<IActionResult> Details(int id)
         {
-            Producer? producer = await service.GetByIdAsync(id);
+            Producer? producer = await this.GetObjectFromDbOrCache(id, service.GetByIdAsync, cache);
             if (producer == null)
             {
                 return RedirectToAction(nameof(Index));
             }
             return View(producer);
         }
-        [RedirectIfNull(_indexPage)]
+        [RedirectIfNull(indexPage)]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
-            Producer? producer = await service.GetByIdAsync(id);
+            Producer? producer = await this.GetObjectFromDbOrCache(id, service.GetByIdAsync, cache);
             if (producer == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -81,14 +88,16 @@ namespace SimpleMVC.Controllers
             else
             {
                 await service.UpdateAsync(producer);
+                cache.Remove(producer);
+                cache.Set(producer.Id, producer, cacheOptions);
                 return RedirectToAction(nameof(Index));
             }
         }
-        [RedirectIfNull(_indexPage)]
+        [RedirectIfNull(indexPage)]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            Producer? producer = await service.GetByIdAsync(id);
+            Producer? producer = await this.GetObjectFromDbOrCache(id, service.GetByIdAsync, cache);
             if (producer == null)
             {
                 return RedirectToAction(nameof(Index));
@@ -96,10 +105,11 @@ namespace SimpleMVC.Controllers
             return View(producer);
         }
         [HttpPost]
-        [RedirectIfNull(_indexPage)]
+        [RedirectIfNull(indexPage)]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            cache.Remove(id);
             await service.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }

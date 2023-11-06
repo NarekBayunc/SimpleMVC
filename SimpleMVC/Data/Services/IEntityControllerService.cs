@@ -9,7 +9,7 @@ namespace SimpleMVC.Data.Services
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T?> GetByIdAsync(int id);
-        Task AddAsync(T entity);
+        Task<int> AddAsync(T entity);
         Task RemoveAsync(int id);
         Task<T> UpdateAsync(T newEntity);
         Task<IEnumerable<T>> GetInlcudedListAsync(Expression<Func<T, object>> includeProperty);

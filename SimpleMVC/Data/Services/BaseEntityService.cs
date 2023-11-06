@@ -13,10 +13,12 @@ namespace SimpleMVC.Data.Services
 
             this.context = context;
         }
-        public async Task AddAsync(T entity)
+
+        public async Task<int> AddAsync(T entity)
         {
             await context.Set<T>().AddAsync(entity);
             await context.SaveChangesAsync();
+            return entity.Id;
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
@@ -29,6 +31,7 @@ namespace SimpleMVC.Data.Services
         {
             return await context.Set<T>().FirstOrDefaultAsync(a => a.Id == id);
         }
+
 
         public async Task<IEnumerable<T>> GetInlcudedListAsync(Expression<Func<T, object>> includeProperty)
         {

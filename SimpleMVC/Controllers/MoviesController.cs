@@ -14,7 +14,7 @@ namespace SimpleMVC.Controllers
         private readonly IEntityControllerService<Movie> movieService;
         private readonly IEntityControllerService<Producer> producerService;
         private readonly IEntityControllerService<Cinema> cinemaService;
-        private readonly UserService service;
+        private readonly UserService userService;
         public MoviesController(IEntityControllerService<Movie> mov, 
             IEntityControllerService<Producer> prod,
             IEntityControllerService<Cinema> cin,
@@ -23,7 +23,7 @@ namespace SimpleMVC.Controllers
             movieService = mov;
             producerService = prod;
             cinemaService = cin;
-            this.service = service;
+            this.userService = service;
         }
         public async Task<IActionResult> Index()
         {
@@ -31,8 +31,8 @@ namespace SimpleMVC.Controllers
             string? userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail != null)
             {
-                User? user = await service.GetByEmailAsync(userEmail);
-                ViewBag.PictureData = user.PictureData;
+                User? user = await userService.GetByEmailAsync(userEmail);
+                ViewBag.PictureData = user?.PictureData;
             }
             return View(data);
         }
@@ -125,7 +125,7 @@ namespace SimpleMVC.Controllers
             if (searchString != null)
             {
                 var movies = await movieService.GetAllAsync(); 
-                var filteredMovies = movies.Where(m => m.Name.ToLower()
+                var filteredMovies = movies.Where(m => m.Name!.ToLower()
                 .Contains(searchString.ToLower()))
                 .ToList();
 

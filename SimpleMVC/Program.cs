@@ -33,6 +33,7 @@ void GetServices()
     builder.Services.AddScoped<IEntityControllerService<Producer>, BaseEntityService<Producer>>();
     builder.Services.AddScoped<IEntityControllerService<Movie>, BaseEntityService<Movie>>();
     builder.Services.AddScoped<UserService>();
+    builder.Services.AddMemoryCache();
     builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                                         .AddCookie(
                                         option =>

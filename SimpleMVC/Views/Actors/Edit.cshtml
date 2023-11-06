@@ -53,9 +53,9 @@
 @section Scripts {
     <script>
         function updateForm() {
-            var newImage = document.getElementById('PictureData').files[0];
+            var newImage = document.getElementById('ActorPictureData').files[0];
             if (newImage) {
-                var output = document.getElementById('PersonPicturePreview');
+                var output = document.getElementById('ActorPicturePreview');
                 var reader = new FileReader();
 
                 reader.onload = function (e) {

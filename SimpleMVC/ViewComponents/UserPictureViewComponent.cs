@@ -20,7 +20,7 @@ namespace SimpleMVC.ViewComponents
             if (userEmail != null)
             {
                 User? user = await userService.GetByEmailAsync(userEmail);
-                byte[] pictureData = user?.PictureData;
+                byte[]? pictureData = user?.PictureData;
                 return View(pictureData);
             }
             return View(null);

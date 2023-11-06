@@ -7,6 +7,7 @@ using SimpleMVC.Models;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using Image = SixLabors.ImageSharp.Image;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace SimpleMVC.Data
 {
@@ -114,15 +115,15 @@ namespace SimpleMVC.Data
             }
             return imageData;
         }
-        public static void UserCookieConfig(User user, out string authScheme,
+        public static void UserCookieConfig(User? user, out string authScheme,
                                                 out ClaimsIdentity? identity,
                                                 out AuthenticationProperties authProp) 
         {
             authScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             List<Claim>? claims = new List<Claim>()
-                            { new Claim(ClaimTypes.Name, user.Login!),
-                              new Claim(ClaimTypes.Email, user.Email!),
-                              new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
+                            { new Claim(ClaimTypes.Name, user?.Login!),
+                              new Claim(ClaimTypes.Email, user?.Email!),
+                              new Claim(ClaimsIdentity.DefaultRoleClaimType, user?.Role.ToString()!)
                             };
             identity = new ClaimsIdentity(claims, authScheme);
             authProp = new AuthenticationProperties()
