@@ -8,6 +8,8 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Image = SixLabors.ImageSharp.Image;
 using Microsoft.Extensions.Caching.Memory;
+using SimpleMVC.Models.ViewModels;
+using SimpleMVC.Data.Services;
 
 namespace SimpleMVC.Data
 {
@@ -131,6 +133,31 @@ namespace SimpleMVC.Data
                 AllowRefresh = true,
                 IsPersistent = true
             };
+        }
+
+        public static async Task<IndexViewModel<T>> GetPaginatedViewModel<T>(int page,
+                                                            IEntityControllerService<T> service)
+        {
+            if (page <= 0) page = 1;
+            int pageSize = 3;
+            IEnumerable<T> allEntities = await service.GetAllAsync();
+            int totalPages = (int)Math.Ceiling((decimal)allEntities.Count() / pageSize);
+            if (page < 1 || page > totalPages)
+            {
+                return new IndexViewModel<T>
+                {
+                    PageInfo = new PageInfo { PageNumber = 1, PageSize = pageSize, TotalItems = allEntities.Count() },
+                    Entities = service.GetForXPagesAsync(page, pageSize)
+                };
+            }
+            IEnumerable<T> entitiesPerPage = service.GetForXPagesAsync(page, pageSize);
+            PageInfo pageInfo = new PageInfo
+            {
+                PageNumber = page,
+                PageSize = pageSize,
+                TotalItems = allEntities.Count()
+            };
+            return new IndexViewModel<T> { PageInfo = pageInfo, Entities = entitiesPerPage };
         }
     }
 }

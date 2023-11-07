@@ -32,6 +32,10 @@ namespace SimpleMVC.Data.Services
             return await context.Set<T>().FirstOrDefaultAsync(a => a.Id == id);
         }
 
+        public IEnumerable<T> GetForXPagesAsync(int page, int pageSize)
+        {
+            return context.Set<T>().Skip((page - 1) * pageSize).Take(pageSize);
+        }
 
         public async Task<IEnumerable<T>> GetInlcudedListAsync(Expression<Func<T, object>> includeProperty)
         {

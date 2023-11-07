@@ -1,4 +1,4 @@
-﻿namespace SimpleMVC.Models
+﻿namespace SimpleMVC.Models.ViewModels
 {
     public class MovieViewModel
     {

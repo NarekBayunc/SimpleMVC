@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
+using SimpleMVC.Models.ViewModels;
 using System.Security.Claims;
 
 namespace SimpleMVC.Controllers

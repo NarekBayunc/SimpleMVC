@@ -6,6 +6,7 @@ using SimpleMVC.Data.CustomAttributes;
 using SimpleMVC.Data.Extensions;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
+using SimpleMVC.Models.ViewModels;
 
 namespace SimpleMVC.Controllers
 {
@@ -21,10 +22,11 @@ namespace SimpleMVC.Controllers
             this.service = service;
             this.cache = cache;
         }
-        public async Task<IActionResult> Index()
-        {
-            return View(await service.GetAllAsync());
-        }
+            public async Task<IActionResult> Index(int page = 1)
+            {
+            IndexViewModel<Actor> ivm = await Helper.GetPaginatedViewModel(page, service);
+                return View(ivm);
+            }
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {

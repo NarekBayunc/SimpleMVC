@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Cinema>
+﻿@model IndexViewModel<Cinema>;
+@using SimpleMVC.Models.ViewModels;
 
 @{
     ViewData["Title"] = "List of Cinemas";
@@ -9,14 +10,14 @@
         <table class="table">
             <thead>
                 <tr class="text-center">
-                    <th>@Html.DisplayNameFor(model => model.LogoData)</th>
-                    <th>@Html.DisplayNameFor(model => model.Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.Entities.FirstOrDefault().LogoData)</th>
+                    <th>@Html.DisplayNameFor(model => model.Entities.FirstOrDefault().Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.Entities.FirstOrDefault().Description)</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.Entities)
                 {
                     <tr>
                         <td>
@@ -35,6 +36,10 @@
                 }
             </tbody>
         </table>
+        <div page-model="@Model.PageInfo" page-action="Index" page-classes-enabled="true"
+             page-class="btn" page-class-normal="btn-outline-secondary"
+             page-class-selected="btn-outline-primary" class="btn-group pull-right m-1">
+        </div>
     </div>
 </div>
 @if (User.IsInRole("Admin"))

@@ -13,5 +13,6 @@ namespace SimpleMVC.Data.Services
         Task RemoveAsync(int id);
         Task<T> UpdateAsync(T newEntity);
         Task<IEnumerable<T>> GetInlcudedListAsync(Expression<Func<T, object>> includeProperty);
+        IEnumerable<T> GetForXPagesAsync(int page, int pageSize);
     }
 }
