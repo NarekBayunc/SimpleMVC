@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SimpleMVC.Data;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
@@ -22,17 +23,23 @@ app.MapControllerRoute(
 
 app.Run();
 
-
+//TODO CANT CREATE MOVIE
+//USER DATA DIDNT SHOW TO ME CORRECTLY AFTER EDITING
 void GetServices()
 {
     string? connection = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddControllersWithViews();
-    builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+    builder.Services.AddDbContext<ApplicationContext>(options =>
+    {
+        options.UseSqlServer(connection);
+        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    });
     builder.Services.AddScoped<IEntityControllerService<Actor>, BaseEntityService<Actor>>();
     builder.Services.AddScoped<IEntityControllerService<Cinema>, BaseEntityService<Cinema>>(); 
     builder.Services.AddScoped<IEntityControllerService<Producer>, BaseEntityService<Producer>>();
     builder.Services.AddScoped<IEntityControllerService<Movie>, BaseEntityService<Movie>>();
     builder.Services.AddScoped<UserService>();
+    builder.Services.AddScoped<CartService>();
     builder.Services.AddMemoryCache();
     builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                                         .AddCookie(

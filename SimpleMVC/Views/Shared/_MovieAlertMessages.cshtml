@@ -1,7 +1,7 @@
 ﻿@if (TempData.ContainsKey("SignedIn"))
 {
     <div id="successAlert" class="alert alert-success text-center">
-        Hello @TempData["SignedIn"], you have successfully created an account.
+        Hello @TempData["SignedIn"], you have successfully created an account
     </div>
 }
 else if (TempData.ContainsKey("LoggedIn"))
@@ -13,7 +13,7 @@ else if (TempData.ContainsKey("LoggedIn"))
 else if (TempData.ContainsKey("IsMovieAdded"))
 {
     <div id="successAlert" class="alert alert-success text-center">
-        New movie are successfuly Added.
+        New movie are successfully Added
     </div>
 }
 else if (TempData.ContainsKey("ProfileEdited"))

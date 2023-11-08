@@ -70,8 +70,10 @@ namespace SimpleMVC.Controllers
                 bool updateResult = await service.UpdateAsync(user.Id, user);
                 if (updateResult)
                 {
-                    cache.Remove(user);
-                    cache.Set(user.Id, user, cacheOptions);
+                    string? userEmail = User.FindFirstValue(ClaimTypes.Email);
+                    User? userAuthed = await this.GetObjectFromDbOrCache(userEmail, service.GetByEmailAsync, cache);
+                    cache.Remove(userAuthed);
+                    cache.Set(user.Email, user, cacheOptions);
                     User? updatedUser = await this.GetObjectFromDbOrCache(user.Id, service.GetByIdAsync, cache);
                     await RefreshSignInAsync(updatedUser);
                     TempData["ProfileEdited"] = "Your data has been successfully changed";

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SimpleMVC.Data;
+using SimpleMVC.Data.Extensions;
 using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 using SimpleMVC.Models.ViewModels;
@@ -16,26 +18,40 @@ namespace SimpleMVC.Controllers
         private readonly IEntityControllerService<Producer> producerService;
         private readonly IEntityControllerService<Cinema> cinemaService;
         private readonly UserService userService;
+        private readonly CartService cartService;
+        private IMemoryCache cache;
+        private readonly MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
+                                                   .SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
         public MoviesController(IEntityControllerService<Movie> mov, 
             IEntityControllerService<Producer> prod,
             IEntityControllerService<Cinema> cin,
-            UserService service)
+            UserService service,
+            IMemoryCache cache,
+            CartService cartService)
         {
             movieService = mov;
             producerService = prod;
             cinemaService = cin;
-            this.userService = service;
+            userService = service;
+            this.cache = cache;
+            this.cartService = cartService;
         }
         public async Task<IActionResult> Index()
         {
-            var data = await movieService.GetInlcudedListAsync(m => m.Cinema!);
+            var movieData = await movieService.GetInlcudedListAsync(m => m.Cinema!);
             string? userEmail = User.FindFirstValue(ClaimTypes.Email);
+            User? user = null;
             if (userEmail != null)
             {
-                User? user = await userService.GetByEmailAsync(userEmail);
+                user = await this.GetObjectFromDbOrCache(userEmail, userService.GetByEmailAsync, cache);
                 ViewBag.PictureData = user?.PictureData;
             }
-            return View(data);
+            var viewModel = new MovieUserViewModel
+            {
+                Movies = movieData,
+                UserData = user
+            };
+            return View(viewModel);
         }
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
@@ -157,6 +173,48 @@ namespace SimpleMVC.Controllers
             }
 
             return false;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int movieId)
+        {
+            string? userEmail = User.FindFirstValue(ClaimTypes.Email);
+            User? user = null;
+            if (userEmail != null)
+            {
+                user = await this.GetObjectFromDbOrCache(userEmail, userService.GetByEmailAsync, cache);
+            }
+            Movie? movieToAdd = await movieService.GetByIdAsync(movieId);
+            if (movieToAdd != null)
+            {
+                CartItem cartItem = new CartItem
+                {
+                    Movie = movieToAdd,
+                    Quantity = 1,
+                };
+                user?.CartItems?.Add(cartItem);
+                await userService.UpdateAsync(user.Id, user);
+            }
+            return RedirectToAction("Index", "Movies");
+        }
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int movieId)
+        {
+            string? userEmail = User.FindFirstValue(ClaimTypes.Email);
+            User? user = null;
+            if (userEmail != null)
+            {
+                user = await this.GetObjectFromDbOrCache(userEmail, userService.GetByEmailAsync, cache);
+            }
+            Movie? movieToRemove = await movieService.GetByIdAsync(movieId);
+            if (movieToRemove != null)
+            {
+                CartItem? cartItem = user?.CartItems?.FirstOrDefault(ci => ci.MovieId == movieToRemove.Id);
+                user?.CartItems?.Remove(cartItem);
+                await cartService.RemoveCartItemAsync(cartItem);
+                await userService.UpdateAsync(user.Id, user);
+            }
+            return RedirectToAction("Index", "Movies");
         }
         public async Task<IEnumerable<Producer>> GetProducersAsync()
         {

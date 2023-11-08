@@ -1,15 +1,14 @@
-﻿@model IEnumerable<Movie>
-
+﻿@model MovieUserViewModel
+@using SimpleMVC.Models.ViewModels
 @{
     ViewData["Title"] = "List of Movies";
 }
-
 <div class="row">
 
     <partial name="_MovieAlertMessages" />
-    @if (Model.Any())
+    @if (Model.Movies.Any())
     {
-        @foreach (var movie in Model)
+        @foreach (var movie in Model.Movies)
         {
             <div class="col-lg-4 col-md-6 col-sm-12 mb-3">
                 <div class="card mb-3" >
@@ -55,12 +54,27 @@
                         <div class="col-md-12">
                             <div class="card-footer">
                                 <p class="card-text">
-                                    <a class="btn btn-outline-primary float-end" asp-action="Details" asp-route-id="@movie?.Id">
-                                        <i class="bi bi-eye-fill"></i> Show Details
-                                    </a>
-                                    <a class="btn btn-success text-white" href="#">
+                                    @if (Model.UserData != null &&
+                                            Model.UserData.CartItems.Any(ci => ci.MovieId == movie?.Id))
+                                    {
+                                        <button class="btn btn-danger text-white remove-from-cart" id="remove-from-cart-@movie?.Id"
+                                        data-movie-id="@movie?.Id">
+                                            <i id="" class="bi bi-cart-dash"></i> Remove from Cart
+                                        </button>
+                                        <script>
+                                            $(document).ready(function () {
+                                                $('#add-to-cart-' + @movie?.Id).hide();
+                                            });
+                                        </script>
+                                    }
+                                    <button class="btn btn-danger text-white remove-from-cart-temp" id="remove-from-cart-temp-@movie?.Id"
+                                            data-movie-id="@movie?.Id" style="display:none;">
+                                        <i id="" class="bi bi-cart-dash"></i> Remove from Cart
+                                    </button>
+                                    <button class="btn btn-success text-white add-to-cart" id="add-to-cart-@movie?.Id"
+                                    data-movie-id="@movie?.Id" href="#">
                                         <i class="bi bi-cart-plus"></i> Add to Cart (Price @movie?.Price.ToString() $)
-                                    </a>
+                                    </button>
                                 </p>
                             </div>
                         </div>
@@ -83,9 +97,50 @@
     @if (User.IsInRole("Admin"))
     {
     <div>
-        <a style="position: fixed; right: 25px; bottom: 70px;" asp-controller="Movies" asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"> Add New</i></a>
+        <a style="position: fixed; right: 25px; bottom: 70px;" asp-controller="Movies" 
+        asp-action="Create" class="btn btn-success"><i class="bi bi-plus-circle"> Add New</i></a>
     </div>
     }
 </div>
 
 
+@section Scripts 
+{
+    <script>
+        $(document).ready(function () {
+            $('.add-to-cart').click(function (e) {
+                e.preventDefault();
+                var movieId = $(this).data('movie-id');
+                $.ajax({
+                    url: '/Movies/AddToCart',
+                    method: 'POST',
+                    data: { movieId: movieId },
+                });
+                $('#add-to-cart-' + movieId).hide();
+                $('#remove-from-cart-temp-' + movieId).show();
+            });
+            $('.remove-from-cart').click(function (e) {
+                e.preventDefault();
+                var movieId = $(this).data('movie-id');
+                $.ajax({
+                    url: '/Movies/RemoveFromCart',
+                    method: 'POST',
+                    data: { movieId: movieId },
+                });
+                $('#remove-from-cart-' + movieId).hide();
+                $('#add-to-cart-' + movieId).show();
+            });
+            $('.remove-from-cart-temp').click(function (e) {
+                e.preventDefault();
+                var movieId = $(this).data('movie-id');
+                $.ajax({
+                    url: '/Movies/RemoveFromCart',
+                    method: 'POST',
+                    data: { movieId: movieId },
+                });
+                $('#remove-from-cart-temp-' + movieId).hide();
+                $('#add-to-cart-' + movieId).show();
+            });
+        });
+    </script>
+}

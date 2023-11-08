@@ -1,0 +1,73 @@
+﻿@model List<Movie>
+@{
+    ViewData["Title"] = "Cart Of Movies";
+}
+@{
+    int movieCount = 1; 
+}
+<div class="container">
+    <h1 class="text-center">Cart</h1>
+
+    @if (Model.Any())
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var movie in Model)
+                        {
+                            <tr>
+                                <td>@movieCount</td>
+                                <td>@movie.Name</td>
+                                <td>@movie.Price.ToString() $</td>
+                                <td style="padding: 10px 0; width: 90px;">
+                                    <input type="number" class="form-control quantity"
+                                    value="1" min="1" max="100" data-price="@movie.Price">
+                                </td>
+                            </tr>
+                            movieCount++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p>Your cart is empty.</p>
+    }
+    <div>
+        <a style="position: fixed; right: 100px; bottom: 100px;" asp-controller="Movies"
+           asp-action="Index" class="btn btn-outline-success"><i class="bi bi-arrow-left"> Movie List</i></a>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+            $(document).ready(function () {
+                $(".quantity").change(function () {
+                    var quantity = parseInt($(this).val());
+                    if (isNaN(quantity) || quantity < 1) {
+                        $(this).val(1);
+                    }
+                    if (quantity > 100) {
+                        $(this).val(100);
+                    }
+                    var quantity = parseInt($(this).val());
+                    var price = parseFloat($(this).data("price"));
+                    var totalPrice = quantity * price;
+                    var formattedPrice = totalPrice.toFixed(2) + " $";
+                    $(this).closest("tr").find("td:nth-child(3)").text(formattedPrice);
+                });
+            });
+    </script>
+}

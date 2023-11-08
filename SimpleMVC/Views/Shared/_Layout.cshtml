@@ -42,6 +42,9 @@
                     }
                     @if (User.Identity!.IsAuthenticated)
                     {
+                        <a asp-controller="Carts" asp-action="Index" class="btn btn-outline-success mx-3">
+                            <i class="bi bi-cart2"></i> Cart
+                        </a>
                         <a asp-controller="Users" asp-action="Index" class="mx-2">
                             @{
                                 @await Component.InvokeAsync("UserPicture")

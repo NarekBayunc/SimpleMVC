@@ -17,17 +17,11 @@ namespace SimpleMVC.Data.Extensions
                     return default;
                 }
                 cache.Set(id, obj, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(30)));
-                Console.WriteLine("DDDDDDDDDDDDDDDDDDDDDDDDDDDBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             }
-            else
-            {
-            Console.WriteLine("CACCHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEe");
-
-            }
-
             return obj;
-        } public static async Task<T?> GetObjectFromDbOrCache<T>(this Controller controller, string email,
+        }
+        public static async Task<T?> GetObjectFromDbOrCache<T>(this Controller controller, string email,
                                             Func<string, Task<T?>> getFromDatabase, IMemoryCache cache)
         {
             cache.TryGetValue(email, out T? obj);
@@ -39,12 +33,6 @@ namespace SimpleMVC.Data.Extensions
                     return default; 
                 }
                 cache.Set(email, obj, new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(30)));
-                Console.WriteLine("DDDDDDDDDDDDDDDDDDDDDDDDDDDBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            }
-            else
-            {
-                Console.WriteLine("CACCHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEe");
-
             }
             return obj;
         }

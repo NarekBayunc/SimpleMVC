@@ -37,12 +37,14 @@ namespace SimpleMVC.Data.Services
         }
         public async Task<bool> UpdateAsync(int id, User user)
         {
-            var userFromDb = await context.Users.FirstOrDefaultAsync(a => a.Id == id);
+            var userFromDb = await context.Users.Include(u=>u.CartItems).ThenInclude(c => c.Movie)
+                .FirstOrDefaultAsync(a => a.Id == id);
             userFromDb!.Login = user.Login;
             userFromDb.Name = user.Name;
             userFromDb.Age = user.Age;
             userFromDb.Email = user.Email;
             userFromDb.PictureData = user.PictureData;
+            userFromDb.CartItems = user.CartItems;
             if (user != null)
             {
                 context.Users.Update(userFromDb);
@@ -56,7 +58,7 @@ namespace SimpleMVC.Data.Services
         }
         public async Task<User?> GetByEmailAsync(string email)
         {
-            return await context.Users.FirstOrDefaultAsync(a => a.Email == email);
+            return await context.Users.Include(u => u.CartItems).FirstOrDefaultAsync(a => a.Email == email);
         }
 
         public bool IsValidMail(User user)

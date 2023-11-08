@@ -31,5 +31,7 @@ namespace SimpleMVC.Models
         [Display(Name = "Picture")]
         [AllowNull]
         public byte[]? PictureData { get; set; } = Helper.DefaultImage();
+        public List<CartItem>? CartItems { get; set; }
+        public decimal Money { get; set; } = 100M; 
     }
 }
