@@ -24,7 +24,6 @@ app.MapControllerRoute(
 app.Run();
 
 //TODO CANT CREATE MOVIE
-//USER DATA DIDNT SHOW TO ME CORRECTLY AFTER EDITING
 void GetServices()
 {
     string? connection = builder.Configuration.GetConnectionString("DefaultConnection");

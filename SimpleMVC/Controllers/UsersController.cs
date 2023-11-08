@@ -6,8 +6,6 @@ using SimpleMVC.Data.Services;
 using SimpleMVC.Models;
 using System.Security.Claims;
 using SimpleMVC.Data;
-using SimpleMVC.Data.Extensions;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace SimpleMVC.Controllers
 {
@@ -15,38 +13,35 @@ namespace SimpleMVC.Controllers
     public class UsersController : Controller
     {
         private readonly UserService service;
-        private IMemoryCache cache;
-        private readonly MemoryCacheEntryOptions cacheOptions = new MemoryCacheEntryOptions()
-                                                   .SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
-        public UsersController(UserService service, IMemoryCache cache)
+        public UsersController(UserService service)
         {
             this.service = service;
-            this.cache = cache;
         }
         public async Task<IActionResult> Index()
         {
             string? userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail != null)
             {
-                User? user = await this.GetObjectFromDbOrCache(userEmail, service.GetByEmailAsync, cache);
+                User? user = await service.GetByEmailAsync(userEmail);
                 return View(user);
             }
+
             return View();
         }
         public async Task<IActionResult> Edit(int id)
         {
-            User? user = await this.GetObjectFromDbOrCache(id, service.GetByIdAsync, cache);
-            User? userAuthed;
+            User? user = await service.GetByIdAsync(id);
+            User? userAuthed = null;
             string? userEmail = User.FindFirstValue(ClaimTypes.Email);
             if (userEmail != null && user != null)
             {
-                userAuthed = await this.GetObjectFromDbOrCache(userEmail, service.GetByEmailAsync, cache);
+                userAuthed = await service.GetByEmailAsync(userEmail);
                 if (user?.Id == userAuthed?.Id)
                 {
                     return View(user);
                 }
             }
-            return RedirectToAction("Index","Movies");
+            return RedirectToAction("Index", "Movies");
         }
         [HttpPost]
         public async Task<IActionResult> Edit(User user, IFormFile? pictureData,
@@ -70,11 +65,7 @@ namespace SimpleMVC.Controllers
                 bool updateResult = await service.UpdateAsync(user.Id, user);
                 if (updateResult)
                 {
-                    string? userEmail = User.FindFirstValue(ClaimTypes.Email);
-                    User? userAuthed = await this.GetObjectFromDbOrCache(userEmail, service.GetByEmailAsync, cache);
-                    cache.Remove(userAuthed);
-                    cache.Set(user.Email, user, cacheOptions);
-                    User? updatedUser = await this.GetObjectFromDbOrCache(user.Id, service.GetByIdAsync, cache);
+                    User? updatedUser = await service.GetByIdAsync(user.Id);
                     await RefreshSignInAsync(updatedUser);
                     TempData["ProfileEdited"] = "Your data has been successfully changed";
                     return RedirectToAction("Index", "Movies");
@@ -83,7 +74,8 @@ namespace SimpleMVC.Controllers
             }
 
         }
-        public async Task RefreshSignInAsync(User? user)
+
+        public async Task RefreshSignInAsync(User user)
         {
             string authScheme;
             ClaimsIdentity? identity;

@@ -54,6 +54,9 @@
                         <div class="col-md-12">
                             <div class="card-footer">
                                 <p class="card-text">
+                                    <a class="btn btn-outline-primary float-end" asp-action="Details" asp-route-id="@movie?.Id">
+                                        <i class="bi bi-eye-fill"></i> Show Details
+                                    </a>
                                     @if (Model.UserData != null &&
                                             Model.UserData.CartItems.Any(ci => ci.MovieId == movie?.Id))
                                     {
